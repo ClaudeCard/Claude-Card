@@ -6,46 +6,87 @@
 
 @layer base {
   html { scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
   body {
-    background: #F8F4EE;
-    color: #2B1A0E;
+    background: #F5F7FC;
+    color: #0C1023;
     font-family: 'DM Sans', system-ui, sans-serif;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
+  a, button, input {
+    border-radius: 0;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #C6A05A;
+    outline-offset: 3px;
+  }
 }
 
 @layer components {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .btn-primary {
     display: inline-block;
-    background: #2B1A0E;
-    color: #F8F4EE;
+    background: #0C1023;
+    color: #F5F0E8;
     padding: 0.85rem 2.2rem;
     font-size: 0.78rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
   }
-  .btn-primary:hover { background: #A07040; }
+  .btn-primary:hover { background: #C6A05A; transform: translateY(-1px); }
   .btn-outline {
     display: inline-block;
     background: transparent;
-    color: #2B1A0E;
+    color: #0C1023;
     padding: 0.85rem 2.2rem;
     font-size: 0.78rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    border: 1px solid rgba(43,26,14,0.25);
+    border: 1px solid rgba(12,16,35,0.22);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
   }
-  .btn-outline:hover { border-color: #A07040; color: #A07040; }
+  .btn-outline:hover { border-color: #C6A05A; color: #C6A05A; transform: translateY(-1px); }
 }
 
 /* ── Mobile responsive ───────────────────────── */
 .nav-hamburger { display: none; }
+
+.coming-soon-badge {
+  animation: coming-soon-pulse 1.15s ease-in-out infinite;
+}
+
+@keyframes coming-soon-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.58;
+    transform: scale(1.06);
+  }
+}
+
+@media (max-width: 980px) {
+  .worlds-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .world-card-full { grid-column: span 2 !important; }
+}
 
 @media (max-width: 768px) {
   .nav-desktop-links { display: none !important; }
@@ -56,12 +97,26 @@
     padding: 4px; position: relative; z-index: 51;
   }
   .hero-section { padding: 0 1.25rem 4rem !important; }
+  .hero-mark {
+    width: 58vw !important;
+    right: -2rem !important;
+    top: 5.5rem !important;
+    opacity: 0.18 !important;
+  }
+  .hero-stats {
+    grid-template-columns: 1fr !important;
+    width: min(100%, 360px) !important;
+  }
   .worlds-section { padding: 3rem 1.25rem 5rem !important; }
-  .worlds-grid { grid-template-columns: 1fr !important; }
-  .worlds-grid > div { grid-column: span 1 !important; }
+  .worlds-grid { grid-template-columns: 1fr !important; gap: 0.85rem !important; }
+  .world-card,
+  .world-card-full { grid-column: span 1 !important; }
   .worlds-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.5rem !important; }
   .worlds-header-num { display: none !important; }
-  .card-inner { height: 260px !important; }
+  .card-inner { min-height: 320px !important; }
+  .card-content {
+    grid-template-rows: 2.8rem 4.4rem auto !important;
+  }
   .about-section { padding: 4rem 1.25rem !important; gap: 3rem !important; }
   .about-est-badge { display: none !important; }
   .rewards-section { padding: 5rem 1.25rem !important; }
@@ -69,8 +124,21 @@
   .circle-section { padding: 5rem 1.25rem !important; }
   .signup-form { flex-direction: column !important; }
   .signup-form input {
-    border-right: 1px solid rgba(160,112,64,0.25) !important;
+    border-right: 1px solid rgba(80,100,160,0.25) !important;
     border-bottom: none !important;
   }
   .signup-form button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .coming-soon-badge {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }

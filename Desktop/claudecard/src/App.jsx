@@ -8,7 +8,7 @@ import './styles/globals.css';
 
 export default function App() {
   return (
-    <div>
+    <div id="top">
       <Nav />
       <main>
         <Hero />

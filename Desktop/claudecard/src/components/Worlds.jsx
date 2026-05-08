@@ -15,16 +15,16 @@ export default function Worlds() {
     }}>
       <div className="worlds-header" style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
-        marginBottom: '4rem', borderTop: '1px solid rgba(160,112,64,0.2)', paddingTop: '3rem'
+        marginBottom: '4rem', borderTop: '1px solid rgba(80,100,160,0.2)', paddingTop: '3rem'
       }}>
         <div>
-          <p style={{ fontSize: '0.7rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#A07040', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.7rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#3D63B8', marginBottom: '0.75rem' }}>
             Project Worlds
           </p>
           <h2 style={{
             fontFamily: 'Cormorant Garamond, serif',
             fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
-            fontWeight: 400, lineHeight: 1.1, color: '#2B1A0E'
+            fontWeight: 400, lineHeight: 1.1, color: '#0C1023'
           }}>
             Seven Worlds.<br />One Ecosystem.
           </h2>
@@ -32,15 +32,14 @@ export default function Worlds() {
         <span className="worlds-header-num" style={{
           fontFamily: 'Cormorant Garamond, serif',
           fontSize: '4rem', fontWeight: 300,
-          color: 'rgba(160,112,64,0.2)', lineHeight: 1
+          color: 'rgba(61,99,184,0.18)', lineHeight: 1
         }}>07</span>
       </div>
 
       <div className="worlds-grid" style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '2px',
-        background: 'rgba(160,112,64,0.12)'
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1rem'
       }}>
         {projects.map((project, i) => (
           <ProjectCard key={project.id} project={project} index={i} />
