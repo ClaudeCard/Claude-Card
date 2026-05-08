@@ -34,7 +34,6 @@ export default function Hero() {
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', position: 'relative' }}>
         <a href="#worlds" className="btn-primary">Explore the Worlds</a>
-        <a href="#circle" className="btn-outline">Join the Circle &ensp;+100 pts</a>
       </div>
 
       <div className="hero-stats" style={{

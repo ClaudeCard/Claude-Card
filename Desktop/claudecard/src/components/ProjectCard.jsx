@@ -48,12 +48,7 @@ export default function ProjectCard({ project, index }) {
         boxShadow: '0 18px 42px rgba(12,16,35,0.08)',
         transition: 'transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94)'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-          <span style={{
-            fontFamily: 'Cormorant Garamond, serif', fontSize: '0.9rem',
-            opacity: 0.58, fontWeight: 600
-          }}>{String(index + 1).padStart(2, '0')}</span>
-
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', position: 'relative', zIndex: 1 }}>
           <span aria-hidden="true" style={{
             width: '2.35rem', height: '2.35rem', borderRadius: '50%',
             background: t.arrow.bg, color: t.arrow.color,
