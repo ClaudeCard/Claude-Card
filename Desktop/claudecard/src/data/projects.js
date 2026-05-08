@@ -61,13 +61,33 @@ export const projects = [
   },
   {
     id: 7,
+    slug: 'menuplan-pro',
+    name: 'MenuPlan Pro',
+    tag: 'Menus · Planning · Operations',
+    desc: 'A sharper way to plan menus, organize ideas, and turn food concepts into executable systems for real kitchens.',
+    theme: 'menuplan',
+    href: 'https://menuplan.pro',
+    span: 1,
+  },
+  {
+    id: 8,
+    slug: 'spiritual-clubhouse',
+    name: 'Spiritual Clubhouse',
+    tag: 'Community · Spirit · Coming Soon',
+    desc: 'A gathering place for reflection, connection, and spiritual practice. Coming soon.',
+    theme: 'spiritual',
+    href: 'https://spiritualclubhouse.com',
+    span: 1,
+  },
+  {
+    id: 9,
     slug: 'food-is-love-mobile-food-pantry',
     name: 'Food Is Love Mobile Food Pantry',
     tag: 'Community · Mobile Pantry · Coming Soon',
     desc: 'A mobile food pantry built to feed bodies, restore dignity, and meet neighbors where they are. Coming soon.',
     theme: 'foodlove',
     href: '#circle',
-    span: 3,
+    span: 1,
   },
 ];
 
@@ -77,7 +97,7 @@ export const roles = [
   { num: '03', title: 'Builder', desc: 'Brands, businesses, tables, trust' },
   { num: '04', title: 'Storyteller', desc: 'Recipes, recipes for living, community' },
   { num: '05', title: 'Servant', desc: 'Disaster relief, pantries, giving back' },
-  { num: '06', title: 'Entrepreneur', desc: 'Seven worlds, one ecosystem' },
+  { num: '06', title: 'Entrepreneur', desc: 'Nine worlds, one ecosystem' },
 ];
 
 export const rewardTiers = [

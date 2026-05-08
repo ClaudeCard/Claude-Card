@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useInView } from '../hooks/useInView';
 
-const worlds = ["Claude's Creations", "Granny Frannie's", 'Food Is Love', 'Love Is Love Meal Prep', 'SweetStone', "Claude's BBQ Club", 'Savvy Scuba'];
+const worlds = ["Claude's Creations", "Granny Frannie's", 'Savvy Scuba', 'SweetStone', 'Food Is Love Meal Prep', "Claude's BBQ Club", 'MenuPlan Pro', 'Spiritual Clubhouse', 'Food Is Love Mobile Food Pantry'];
 const ecosystem = ['Rewards Circle', 'About Claude', 'Events', 'Volunteer', 'Newsletter'];
 const social = ['Instagram', 'TikTok', 'YouTube', 'Facebook', 'Contact'];
 

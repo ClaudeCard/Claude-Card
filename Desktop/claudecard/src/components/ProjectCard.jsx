@@ -7,13 +7,15 @@ const themes = {
   sweetstone:{ bg: '#FFFFFF', text: '#10265F', tag: '#10265F', arrow: { bg: '#10265F', color: '#FFFFFF' } },
   bbq:       { bg: '#1C1008', text: '#F0E8D8', tag: '#D06030', arrow: { bg: '#D06030', color: '#1C1008' } },
   scuba:     { bg: '#041828', text: '#E0F0F8', tag: '#40B8D8', arrow: { bg: '#40B8D8', color: '#041828' } },
+  menuplan:  { bg: '#0C1023', text: '#F5F7FC', tag: '#8FB4FF', arrow: { bg: '#8FB4FF', color: '#0C1023' } },
+  spiritual: { bg: '#F2F0FF', text: '#24104F', tag: '#6E45D8', arrow: { bg: '#6E45D8', color: '#FFFFFF' } },
 };
 
 export default function ProjectCard({ project, index }) {
   const t = themes[project.theme] || themes.creations;
   const isExternal = project.href?.startsWith('http');
   const gridSpan = project.span === 3 ? 3 : 1;
-  const isComingSoon = project.slug === 'food-is-love-mobile-food-pantry';
+  const isComingSoon = project.tag.includes('Coming Soon');
 
   return (
     <a

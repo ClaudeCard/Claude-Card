@@ -26,14 +26,14 @@ export default function Worlds() {
             fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
             fontWeight: 400, lineHeight: 1.1, color: '#0C1023'
           }}>
-            Seven Worlds.<br />One Ecosystem.
+            Nine Worlds.<br />One Ecosystem.
           </h2>
         </div>
         <span className="worlds-header-num" style={{
           fontFamily: 'Cormorant Garamond, serif',
           fontSize: '4rem', fontWeight: 300,
           color: 'rgba(61,99,184,0.18)', lineHeight: 1
-        }}>07</span>
+        }}>09</span>
       </div>
 
       <div className="worlds-grid" style={{
