@@ -49,7 +49,7 @@ export default function About() {
           width: '100%', aspectRatio: '4/5',
           position: 'relative', overflow: 'hidden'
         }}>
-          <img src="/claude.png" alt="Claude" style={{
+          <img src="/claude.jpg" alt="Claude" style={{
             width: '100%', height: '100%', objectFit: 'cover', display: 'block'
           }} />
           <div style={{
