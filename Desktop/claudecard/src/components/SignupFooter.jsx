@@ -184,7 +184,7 @@ export function Footer() {
 
         <div>
           <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Connect</p>
-          <a href="mailto:claudecard710@gmail.com" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>claudecard710@gmail.com</a>
+          <a href="mailto:claudecard710@gmail.com" style={{ display: 'inline-block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Email Us</a>
         </div>
       </footer>
 
