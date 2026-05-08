@@ -36,7 +36,6 @@ export default function About() {
         <div style={{ marginTop: '3rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
           {roles.map(role => (
             <div key={role.num} style={{ padding: '1.25rem', border: '1px solid rgba(80,100,160,0.16)', background: 'rgba(255,255,255,0.5)' }}>
-              <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '0.78rem', color: '#3D63B8', marginBottom: '0.5rem' }}>{role.num}</p>
               <p style={{ fontSize: '0.82rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0C1023', fontWeight: 500 }}>{role.title}</p>
               <p style={{ fontSize: '0.8rem', color: '#68748E', marginTop: '0.25rem' }}>{role.desc}</p>
             </div>
