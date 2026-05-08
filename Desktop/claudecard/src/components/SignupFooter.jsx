@@ -49,6 +49,7 @@ export function Signup() {
           Welcome to the circle.
         </p>
       ) : (
+        <>
         <form onSubmit={async e => {
             e.preventDefault();
             if (!email) return;
@@ -95,6 +96,7 @@ export function Signup() {
         {error && (
           <p style={{ fontSize: '0.78rem', color: '#C04040', marginTop: '0.75rem' }}>{error}</p>
         )}
+        </>
       )}
 
       <p style={{ fontSize: '0.72rem', color: 'rgba(104,116,142,0.7)', marginTop: '1.25rem', letterSpacing: '0.05em' }}>
