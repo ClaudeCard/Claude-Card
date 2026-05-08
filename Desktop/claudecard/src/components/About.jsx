@@ -47,15 +47,21 @@ export default function About() {
       <div style={{ position: 'relative' }}>
         <div style={{
           width: '100%', aspectRatio: '4/5',
-          background: 'linear-gradient(145deg, #EDF2FF, rgba(61,99,184,0.12))',
-          border: '1px solid rgba(80,100,160,0.24)',
-          display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', position: 'relative', overflow: 'hidden'
+          position: 'relative', overflow: 'hidden'
         }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(61,99,184,0.12), transparent)' }} />
-          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontStyle: 'italic', color: '#3D63B8', position: 'relative', lineHeight: 1.5, marginBottom: '0.5rem' }}>
-            "Food is the first<br />language of love."
-          </p>
-          <p style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#68748E', position: 'relative' }}>Est. 2011</p>
+          <img src="/claude.png" alt="Claude" style={{
+            width: '100%', height: '100%', objectFit: 'cover', display: 'block'
+          }} />
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            background: 'linear-gradient(transparent, rgba(12,16,35,0.7))',
+            padding: '2rem'
+          }}>
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontStyle: 'italic', color: '#F5F0E8', lineHeight: 1.5, marginBottom: '0.4rem' }}>
+              "Food is the first<br />language of love."
+            </p>
+            <p style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(198,160,90,0.85)' }}>Est. 2011</p>
+          </div>
         </div>
       </div>
     </section>
