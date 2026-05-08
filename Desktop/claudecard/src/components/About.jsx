@@ -49,20 +49,14 @@ export default function About() {
           width: '100%', aspectRatio: '4/5',
           background: 'linear-gradient(145deg, #EDF2FF, rgba(61,99,184,0.12))',
           border: '1px solid rgba(80,100,160,0.24)',
-          display: 'flex', alignItems: 'flex-end', padding: '2rem', position: 'relative', overflow: 'hidden'
+          display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem', position: 'relative', overflow: 'hidden'
         }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(61,99,184,0.12), transparent)' }} />
-          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontStyle: 'italic', color: '#3D63B8', position: 'relative', lineHeight: 1.5 }}>
+          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontStyle: 'italic', color: '#3D63B8', position: 'relative', lineHeight: 1.5, marginBottom: '0.5rem' }}>
             "Food is the first<br />language of love."
           </p>
+          <p style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#68748E', position: 'relative' }}>Est. 2011</p>
         </div>
-        <div className="about-est-badge" style={{
-          position: 'absolute', top: '1.5rem', right: '-1.5rem',
-          background: '#0C1023', color: '#F5F7FC',
-          padding: '1rem 0.75rem', fontSize: '0.7rem',
-          letterSpacing: '0.15em', textTransform: 'uppercase',
-          writingMode: 'vertical-rl'
-        }}>Est. 2024</div>
       </div>
     </section>
   );
