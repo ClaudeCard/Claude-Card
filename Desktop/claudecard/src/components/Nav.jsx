@@ -1,15 +1,26 @@
 import { useState, useEffect } from 'react';
+import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
 
 const links = ['About', 'Worlds', 'Rewards', 'Circle'];
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!hasSupabaseConfig) return;
+    supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+      setLoggedIn(!!session?.user);
+    });
+    return () => listener.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -48,12 +59,24 @@ export default function Nav() {
               color: '#68748E', textDecoration: 'none', transition: 'color 0.2s'
             }}>{label}</a>
           ))}
-          <a href="#circle" style={{
-            background: '#0C1023', color: '#F5F0E8',
-            padding: '0.55rem 1.4rem', fontSize: '0.75rem',
-            letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none',
-            transition: 'background 0.2s'
-          }}>Join +100 pts</a>
+          {loggedIn ? (
+            <a href="#circle" style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              background: '#0C1023', color: '#F5F0E8',
+              padding: '0.55rem 1.4rem', fontSize: '0.75rem',
+              letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none'
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#C6A05A', flexShrink: 0 }} />
+              My Passport
+            </a>
+          ) : (
+            <a href="#circle" style={{
+              background: '#0C1023', color: '#F5F0E8',
+              padding: '0.55rem 1.4rem', fontSize: '0.75rem',
+              letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none',
+              transition: 'background 0.2s'
+            }}>Join +100 pts</a>
+          )}
         </div>
 
         <button className="nav-hamburger" onClick={() => setMenuOpen(m => !m)} aria-label="Menu" aria-expanded={menuOpen} aria-controls="mobile-menu">
