@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useInView } from '../hooks/useInView';
+import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
 
 const worlds = ["Claude's Creations", "Granny Frannie's", 'Savvy Scuba', 'SweetStone', 'Food Is Love Meal Prep', "Claude's BBQ Club", 'MenuPlan Pro', 'Spiritual Clubhouse', 'Food Is Love Mobile Food Pantry'];
 const ecosystem = ['Rewards Circle', 'About Claude', 'Events', 'Volunteer', 'Newsletter'];
@@ -9,6 +10,8 @@ export function Signup() {
   const [ref, inView] = useInView();
   const [email, setEmail] = useState('');
   const [joined, setJoined] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   return (
     <section id="circle" ref={ref} className="circle-section" style={{
@@ -46,7 +49,26 @@ export function Signup() {
           Welcome to the circle.
         </p>
       ) : (
-        <form onSubmit={e => { e.preventDefault(); if (email) setJoined(true); }}
+        <form onSubmit={async e => {
+            e.preventDefault();
+            if (!email) return;
+            setLoading(true);
+            setError('');
+            if (hasSupabaseConfig) {
+              const { error: err } = await supabase.from('subscribers').insert({
+                email,
+                site_key: import.meta.env.VITE_SITE_KEY || 'claudecard',
+                site_name: import.meta.env.VITE_SITE_NAME || 'Claude Card',
+              });
+              if (err && err.code !== '23505') {
+                setError('Something went wrong. Please try again.');
+                setLoading(false);
+                return;
+              }
+            }
+            setJoined(true);
+            setLoading(false);
+          }}
           className="signup-form"
           style={{ display: 'flex', maxWidth: '480px', margin: '0 auto' }}>
           <label htmlFor="circle-email" className="sr-only">Email address</label>
@@ -62,13 +84,17 @@ export function Signup() {
               fontFamily: 'DM Sans, sans-serif'
             }}
           />
-          <button type="submit" style={{
+          <button type="submit" disabled={loading} style={{
             background: '#0C1023', color: '#F5F7FC',
             border: '1px solid #0C1023', padding: '0.95rem 1.75rem',
             fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-            cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'DM Sans, sans-serif'
-          }}>Join +100 pts</button>
+            cursor: loading ? 'wait' : 'pointer', whiteSpace: 'nowrap',
+            fontFamily: 'DM Sans, sans-serif', opacity: loading ? 0.7 : 1
+          }}>{loading ? '...' : 'Join +100 pts'}</button>
         </form>
+        {error && (
+          <p style={{ fontSize: '0.78rem', color: '#C04040', marginTop: '0.75rem' }}>{error}</p>
+        )}
       )}
 
       <p style={{ fontSize: '0.72rem', color: 'rgba(104,116,142,0.7)', marginTop: '1.25rem', letterSpacing: '0.05em' }}>

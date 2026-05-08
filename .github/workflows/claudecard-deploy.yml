@@ -27,6 +27,11 @@ jobs:
 
       - name: Build
         working-directory: Desktop/claudecard
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SITE_KEY: claudecard
+          VITE_SITE_NAME: Claude Card
         run: npm run build
 
       - name: Deploy to GitHub Pages
