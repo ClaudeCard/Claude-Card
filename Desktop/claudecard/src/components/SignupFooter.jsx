@@ -4,7 +4,6 @@ import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
 
 const worlds = ["Claude's Creations", "Granny Frannie's", 'Savvy Scuba', 'SweetStone', 'Food Is Love Meal Prep', "Claude's BBQ Club", 'MenuPlan Pro', 'Spiritual Clubhouse', 'Food Is Love Mobile Food Pantry'];
 const ecosystem = ['Rewards Circle', 'About Claude', 'Events', 'Volunteer', 'Newsletter'];
-const social = ['Instagram', 'TikTok', 'YouTube', 'Facebook', 'Contact'];
 
 export function Signup() {
   const [ref, inView] = useInView();
@@ -185,9 +184,7 @@ export function Footer() {
 
         <div>
           <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Connect</p>
-          {social.map(s => (
-            <a key={s} href="#circle" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>{s}</a>
-          ))}
+          <a href="mailto:claudecard710@gmail.com" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>claudecard710@gmail.com</a>
         </div>
       </footer>
 
