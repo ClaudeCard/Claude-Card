@@ -43,25 +43,11 @@ export default function About() {
         </div>
       </div>
 
-      <div style={{ position: 'relative' }}>
-        <div style={{
-          width: '100%', aspectRatio: '4/5',
-          position: 'relative', overflow: 'hidden'
-        }}>
-          <img src="/claude.jpg" alt="Claude" style={{
-            width: '100%', height: '100%', objectFit: 'cover', display: 'block'
-          }} />
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0,
-            background: 'linear-gradient(transparent, rgba(12,16,35,0.7))',
-            padding: '2rem'
-          }}>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontStyle: 'italic', color: '#F5F0E8', lineHeight: 1.5, marginBottom: '0.4rem' }}>
-              "Food is the first<br />language of love."
-            </p>
-            <p style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(198,160,90,0.85)' }}>Est. 2011</p>
-          </div>
-        </div>
+      <div>
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem', fontStyle: 'italic', color: '#C6A05A', lineHeight: 1.5, marginBottom: '1rem' }}>
+          "Food is the first<br />language of love."
+        </p>
+        <p style={{ fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#68748E' }}>Est. 2011</p>
       </div>
     </section>
   );
