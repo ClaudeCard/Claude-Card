@@ -12,8 +12,9 @@ export default function RewardsAuth() {
 
     let mounted = true;
 
-    supabase.auth.getUser().then(({ data }) => {
-      if (mounted) setUser(data.user ?? null);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) loadProfile(session.user);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -37,7 +38,7 @@ export default function RewardsAuth() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.href,
+        emailRedirectTo: window.location.origin,
       },
     });
 

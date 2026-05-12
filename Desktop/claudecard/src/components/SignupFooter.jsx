@@ -21,7 +21,10 @@ function formatDate(val) {
 export function Signup() {
   const [ref, inView] = useInView();
   const [email, setEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
   const [status, setStatus] = useState('idle');
+  const [password, setPassword] = useState('');
+  const [authMode, setAuthMode] = useState('signin');
   const [errorMsg, setErrorMsg] = useState('');
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -32,50 +35,66 @@ export function Signup() {
   const loadPassport = useCallback(async (activeUser) => {
     if (!activeUser || !hasSupabaseConfig) return;
     setLoadingPassport(true);
+    try {
+      // join_site_membership awards first-time points — fail gracefully
+      await supabase.rpc('join_site_membership', { p_site_key: siteKey, p_site_name: siteName }).catch(() => {});
 
-    await supabase.rpc('join_site_membership', { p_site_key: siteKey, p_site_name: siteName });
-
-    const [p, m, t] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', activeUser.id).single(),
-      supabase.from('site_memberships').select('*').eq('user_id', activeUser.id).eq('site_key', siteKey).single(),
-      supabase.from('reward_transactions').select('*').eq('user_id', activeUser.id).order('created_at', { ascending: false }).limit(5),
-    ]);
-
-    setProfile(p.data ?? null);
-    setMembership(m.data ?? null);
-    setTransactions(t.data ?? []);
-    setLoadingPassport(false);
+      const [p, m, t] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', activeUser.id).single(),
+        supabase.from('site_memberships').select('*').eq('user_id', activeUser.id).eq('site_key', siteKey).single(),
+        supabase.from('reward_transactions').select('*').eq('user_id', activeUser.id).order('created_at', { ascending: false }).limit(5),
+      ]);
+      setProfile(p.data ?? null);
+      setMembership(m.data ?? null);
+      setTransactions(t.data ?? []);
+    } catch (e) {
+      console.error('loadPassport error:', e);
+    } finally {
+      setLoadingPassport(false);
+    }
   }, []);
 
   useEffect(() => {
     if (!hasSupabaseConfig) return;
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null);
-      if (data.user) loadPassport(data.user);
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+    // Subscribe FIRST so we never miss an auth event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       const u = session?.user ?? null;
       setUser(u);
       if (u) loadPassport(u);
       else { setProfile(null); setMembership(null); setTransactions([]); }
     });
-    return () => listener.subscription.unsubscribe();
+    // Then read current session from localStorage (catches hash redirect tokens)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) loadPassport(u);
+    });
+    return () => subscription.unsubscribe();
   }, [loadPassport]);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!email) return;
+  async function handleSignIn() {
+    if (!email || !password) { setErrorMsg('Please enter your email and password.'); return; }
+    setStatus('loading'); setErrorMsg('');
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setStatus('idle');
+    if (error) setErrorMsg(error.message === 'Invalid login credentials' ? 'Incorrect email or password. Try "Forgot password?" if this is your first time signing in with a password.' : error.message);
+  }
+
+  async function handleSignUp() {
+    if (!email || !password) { setErrorMsg('Please enter email and password.'); return; }
+    if (password.length < 6) { setErrorMsg('Password must be at least 6 characters.'); return; }
+    setStatus('loading'); setErrorMsg('');
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    setStatus('idle');
+    if (error) { setErrorMsg(error.message); return; }
+    if (!data.session) setErrorMsg('Check your email to confirm your account, then sign in.');
+  }
+
+  async function handleForgot() {
+    if (!email) { setErrorMsg('Enter your email first.'); return; }
     setStatus('loading');
-    setErrorMsg('');
-    if (hasSupabaseConfig) {
-      await supabase.from('subscribers').insert({ email, site_key: siteKey, site_name: siteName });
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: window.location.href },
-      });
-      if (error) { setErrorMsg(error.message); setStatus('error'); return; }
-    }
-    setStatus('sent');
+    await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    setStatus('idle'); setAuthMode('signin');
   }
 
   async function handleLogout() {
@@ -200,95 +219,33 @@ export function Signup() {
             Early access, secret drops, events, recipes, and member rewards — delivered to you before anyone else.
           </p>
 
-          {status === 'sent' ? (
-            <p aria-live="polite" style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontStyle: 'italic', color: '#C6A05A', textAlign: 'center' }}>
-              Check your email — your link is waiting. ✦
-            </p>
-          ) : (
-            <>
-              <form onSubmit={handleSubmit} className="signup-form"
-                style={{ display: 'flex', maxWidth: '480px', margin: '0 auto' }}>
-                <label htmlFor="circle-email" className="sr-only">Email address</label>
-                <input
-                  id="circle-email"
-                  type="email" value={email} onChange={e => setEmail(e.target.value)}
-                  autoComplete="email" placeholder="Your email address" required
-                  style={{
-                    flex: 1, border: '1px solid rgba(80,100,160,0.25)', borderRight: 'none',
-                    background: 'transparent', padding: '0.95rem 1.25rem',
-                    fontSize: '0.85rem', color: '#0C1023', outline: 'none',
-                    fontFamily: 'DM Sans, sans-serif'
-                  }}
-                />
-                <button type="submit" disabled={status === 'loading'} style={{
-                  background: '#0C1023', color: '#F5F7FC',
-                  border: '1px solid #0C1023', padding: '0.95rem 1.75rem',
-                  fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                  cursor: status === 'loading' ? 'wait' : 'pointer', whiteSpace: 'nowrap',
-                  fontFamily: 'DM Sans, sans-serif', opacity: status === 'loading' ? 0.7 : 1
-                }}>{status === 'loading' ? '...' : 'Join +100 pts'}</button>
-              </form>
-              {status === 'error' && (
-                <p style={{ fontSize: '0.78rem', color: '#C04040', marginTop: '0.75rem', textAlign: 'center' }}>{errorMsg}</p>
-              )}
-              <p style={{ fontSize: '0.72rem', color: 'rgba(104,116,142,0.7)', marginTop: '1.25rem', letterSpacing: '0.05em', textAlign: 'center' }}>
-                New or returning — one email gets you in.
-              </p>
+          <>
+              {errorMsg && <p style={{ fontSize: '0.78rem', color: '#C04040', marginBottom: '0.75rem', textAlign: 'center' }}>{errorMsg}</p>}
+              <div style={{ maxWidth: '480px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email address" autoComplete="email"
+                  style={{ border: '1px solid rgba(80,100,160,0.25)', background: 'transparent', padding: '0.95rem 1.25rem', fontSize: '0.85rem', color: '#0C1023', outline: 'none', fontFamily: 'DM Sans, sans-serif', width: '100%', boxSizing: 'border-box' }}/>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && (authMode === 'signin' ? handleSignIn() : handleSignUp())}
+                  placeholder="Password" autoComplete={authMode === 'signin' ? 'current-password' : 'new-password'}
+                  style={{ border: '1px solid rgba(80,100,160,0.25)', background: 'transparent', padding: '0.95rem 1.25rem', fontSize: '0.85rem', color: '#0C1023', outline: 'none', fontFamily: 'DM Sans, sans-serif', width: '100%', boxSizing: 'border-box' }}/>
+                <button onClick={authMode === 'signin' ? handleSignIn : handleSignUp} disabled={status === 'loading'}
+                  style={{ background: '#0C1023', color: '#F5F7FC', border: 'none', padding: '0.95rem', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: status === 'loading' ? 'wait' : 'pointer', fontFamily: 'DM Sans, sans-serif', opacity: status === 'loading' ? 0.7 : 1 }}>
+                  {status === 'loading' ? '…' : authMode === 'signin' ? 'Sign In' : 'Create Account'}
+                </button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'rgba(104,116,142,0.8)' }}>
+                  <button onClick={() => { setAuthMode(authMode === 'signin' ? 'signup' : 'signin'); setErrorMsg(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.72rem', color: 'rgba(80,100,160,0.8)', fontFamily: 'DM Sans, sans-serif' }}>
+                    {authMode === 'signin' ? 'Create an account →' : '← Back to sign in'}
+                  </button>
+                  {authMode === 'signin' && <button onClick={handleForgot} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.72rem', color: 'rgba(104,116,142,0.7)', fontFamily: 'DM Sans, sans-serif' }}>Forgot password?</button>}
+                </div>
+              </div>
             </>
-          )}
-        </>
+          </>
       )}
     </section>
   );
 }
 
 export function Footer() {
-  return (
-    <>
-      <footer style={{
-        borderTop: '1px solid rgba(80,100,160,0.15)',
-        padding: '4rem 2.5rem 3rem',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-        gap: '2rem', maxWidth: '1400px', margin: '0 auto'
-      }}>
-        <div>
-          <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.3rem', fontWeight: 600, color: '#0C1023', marginBottom: '0.75rem' }}>
-            Claude<span style={{ color: '#C6A05A' }}>Card</span>
-          </div>
-          <p style={{ fontSize: '0.8rem', color: '#68748E', lineHeight: 1.7 }}>
-            A world of food, hospitality, adventure, wellness, service, storytelling, and ridiculous creativity.
-          </p>
-        </div>
-
-        <div>
-          <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Worlds</p>
-          {worlds.map(w => (
-            <a key={w} href="#worlds" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>{w}</a>
-          ))}
-        </div>
-
-        <div>
-          <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Ecosystem</p>
-          {ecosystem.map(e => (
-            <a key={e} href={e === 'Rewards Circle' ? '#circle' : e === 'About Claude' ? '#about' : '#circle'} style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>{e}</a>
-          ))}
-        </div>
-
-        <div>
-          <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Connect</p>
-          <a href="mailto:claudecard710@gmail.com" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Email Us</a>
-        </div>
-      </footer>
-
-      <div style={{
-        borderTop: '1px solid rgba(80,100,160,0.1)',
-        textAlign: 'center', fontSize: '0.72rem',
-        color: 'rgba(104,116,142,0.6)', letterSpacing: '0.08em',
-        padding: '1.5rem 2.5rem'
-      }}>
-        © 2025 ClaudeCard.pro — All Rights Reserved
-      </div>
-    </>
-  );
+  return null;
 }

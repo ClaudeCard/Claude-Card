@@ -1,23 +1,17 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
-import Hero from './components/Hero';
-import About from './components/About';
-import Worlds from './components/Worlds';
-import Rewards from './components/Rewards';
-import { Signup, Footer } from './components/SignupFooter';
+import HomePage from './pages/HomePage';
+import RewardsPage from './pages/RewardsPage';
 import './styles/globals.css';
 
 export default function App() {
   return (
-    <div id="top">
+    <BrowserRouter>
       <Nav />
-      <main>
-        <Hero />
-        <About />
-        <Worlds />
-        <Rewards />
-        <Signup />
-      </main>
-      <Footer />
-    </div>
+      <Routes>
+        <Route path="/"        element={<HomePage />} />
+        <Route path="/rewards" element={<RewardsPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
