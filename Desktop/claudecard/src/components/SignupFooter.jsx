@@ -73,7 +73,7 @@ export function Signup() {
       const [p, m, t] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', activeUser.id).single(),
         supabase.from('site_memberships').select('*').eq('user_id', activeUser.id).order('joined_at', { ascending: true }),
-        supabase.from('reward_transactions').select('*').eq('user_id', activeUser.id).order('created_at', { ascending: false }).limit(6),
+        supabase.from('reward_transactions').select('*').eq('user_id', activeUser.id).order('created_at', { ascending: false }),
       ]);
       setProfile(p.data ?? null);
       setMemberships(m.data ?? []);
@@ -133,7 +133,8 @@ export function Signup() {
     setUser(null); setStatus('idle'); setEmail('');
   }
 
-  const globalPts  = profile?.global_points ?? 0;
+  // Sum all transactions for accurate cross-site total
+  const globalPts  = transactions.reduce((sum, tx) => sum + (tx.global_points || 0), 0) || profile?.global_points || 0;
   const currentTier = tierOf(globalPts);
   const nextTier    = TIERS[TIERS.indexOf(currentTier) + 1] ?? null;
   const progress    = nextTier
@@ -264,7 +265,7 @@ export function Signup() {
               <p style={label}>Recent Activity</p>
               {transactions.length === 0 ? (
                 <p style={{ fontSize: '0.82rem', color: '#68748E' }}>No activity yet.</p>
-              ) : transactions.map(tx => (
+              ) : transactions.slice(0, 6).map(tx => (
                 <div key={tx.id} style={{
                   padding: '0.85rem 0', borderBottom: '1px solid rgba(80,100,160,0.08)',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem'
