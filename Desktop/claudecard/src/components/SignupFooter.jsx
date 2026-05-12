@@ -18,7 +18,7 @@ const TIERS = [
 const KNOWN_SITES = [
   { key: 'claudecard',     name: 'ClaudeCard',         url: 'claudecard.pro'     },
   { key: 'granny_frannies', name: "Granny Frannie's",   url: 'grannyfrannies.com' },
-  { key: 'savvyscuba',     name: 'Savvy Scuba',        url: 'savvyscuba.com'     },
+  { key: 'savvy_scuba',    name: 'Savvy Scuba',        url: 'savvyscuba.com'     },
 ];
 
 const PERKS = {
@@ -34,7 +34,7 @@ const PERKS = {
     'Inner Circle':  '15% off + early access to seasonal drops',
     'Founding Flame':'20% off + monthly surprise box',
   },
-  savvyscuba: {
+  savvy_scuba: {
     Taster:          '5% off dive trips & courses',
     Regular:         '10% off dive trips + gear rentals',
     'Inner Circle':  '15% off + priority booking on sold-out trips',
