@@ -74,22 +74,15 @@ export default function App() {
   useEffect(() => {
     if (!hasSupabaseConfig) return;
 
-    // Check if this page load has a recovery hash (homepage redirect from Supabase)
+    // Detect recovery from initialHash (captured before Supabase clears it)
+    // Supabase's detectSessionInUrl already set the session — just show the modal
     const hash = new URLSearchParams(initialHash.replace('#', ''));
-    if (hash.get('type') === 'recovery') {
-      // Set the session from the hash tokens so updateUser works
-      const access_token  = hash.get('access_token');
-      const refresh_token = hash.get('refresh_token');
-      if (access_token && refresh_token) {
-        supabase.auth.setSession({ access_token, refresh_token })
-          .then(() => setRecovering(true));
-      } else {
-        setRecovering(true);
-      }
+    if (hash.get('type') === 'recovery' || initialHash.includes('type=recovery')) {
+      setRecovering(true);
       return;
     }
 
-    // Also listen for the event in case Supabase processes the hash first
+    // Fallback: listen for the event (fires if Supabase processes hash asynchronously)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
       if (event === 'PASSWORD_RECOVERY') setRecovering(true);
     });
