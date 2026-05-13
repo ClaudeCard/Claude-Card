@@ -4,7 +4,7 @@ import Nav from './components/Nav';
 import HomePage from './pages/HomePage';
 import RewardsPage from './pages/RewardsPage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
-import { supabase, hasSupabaseConfig, initialHash } from './lib/supabaseClient';
+import { supabase, hasSupabaseConfig, initialHash, pendingRecovery } from './lib/supabaseClient';
 import './styles/globals.css';
 
 function PasswordResetModal() {
@@ -69,20 +69,14 @@ function PasswordResetModal() {
 }
 
 export default function App() {
-  const [recovering, setRecovering] = useState(false);
+  // Initialize from module-level flag — catches events that fire before React mounts
+  const [recovering, setRecovering] = useState(
+    pendingRecovery || initialHash.includes('type=recovery')
+  );
 
   useEffect(() => {
     if (!hasSupabaseConfig) return;
-
-    // Detect recovery from initialHash (captured before Supabase clears it)
-    // Supabase's detectSessionInUrl already set the session — just show the modal
-    const hash = new URLSearchParams(initialHash.replace('#', ''));
-    if (hash.get('type') === 'recovery' || initialHash.includes('type=recovery')) {
-      setRecovering(true);
-      return;
-    }
-
-    // Fallback: listen for the event (fires if Supabase processes hash asynchronously)
+    // Also listen for late-firing events
     const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
       if (event === 'PASSWORD_RECOVERY') setRecovering(true);
     });
