@@ -123,7 +123,7 @@ export function Signup() {
   async function handleForgot() {
     if (!email) { setErrorMsg('Enter your email first.'); return; }
     setStatus('loading');
-    await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    await supabase.auth.resetPasswordForEmail(email, { redirectTo: 'https://claudecard.pro/auth/callback' });
     setStatus('idle'); setAuthMode('signin');
     setErrorMsg('Reset email sent — check your inbox.');
   }
