@@ -1,54 +1,58 @@
 import { useEffect, useState } from 'react';
-import { supabase, initialHash } from '../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 const FUNCTIONS_URL = 'https://btnqffnhxvixpenspmgz.supabase.co/functions/v1';
 
 export default function AuthCallbackPage() {
-  const params   = new URLSearchParams(window.location.search);
-  const ssoToken = params.get('sso');
+  const searchParams = new URLSearchParams(window.location.search);
+  const ssoToken     = searchParams.get('sso');
 
-  // Detect password recovery from hash before Supabase clears it
-  const hashParams    = new URLSearchParams(initialHash.replace('#', ''));
-  const isRecovery    = hashParams.get('type') === 'recovery' || initialHash.includes('type=recovery');
+  // By the time this component renders, main.jsx has already restored
+  // the hash via window.history.replaceState — so window.location.hash is live
+  const hashParams   = new URLSearchParams(window.location.hash.replace('#', ''));
+  const isRecovery   = hashParams.get('type') === 'recovery';
+  const accessToken  = hashParams.get('access_token');
+  const refreshToken = hashParams.get('refresh_token');
 
   const [mode, setMode]         = useState(isRecovery ? 'reset' : ssoToken ? 'sso' : 'redirect');
+  const [ready, setReady]       = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState('');
   const [done, setDone]         = useState(false);
 
   useEffect(() => {
-    if (mode === 'sso') {
-      async function exchange() {
-        try {
-          const res = await fetch(`${FUNCTIONS_URL}/sso-exchange`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: ssoToken }),
-          });
-          if (res.ok) {
-            const { magic_url } = await res.json();
-            window.location.replace(magic_url);
-          } else {
-            window.location.replace('/rewards');
-          }
-        } catch {
-          window.location.replace('/rewards');
-        }
+    if (mode === 'reset') {
+      // Establish the Supabase session from the hash tokens
+      // so that updateUser() has auth context
+      if (accessToken && refreshToken) {
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+          .then(() => setReady(true));
+      } else {
+        // Fallback: listen for the PASSWORD_RECOVERY event
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
+          if (event === 'PASSWORD_RECOVERY') setReady(true);
+        });
+        return () => subscription.unsubscribe();
       }
-      exchange();
+    }
+
+    if (mode === 'sso') {
+      fetch(`${FUNCTIONS_URL}/sso-exchange`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: ssoToken }),
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data?.magic_url) window.location.replace(data.magic_url);
+          else window.location.replace('/rewards');
+        })
+        .catch(() => window.location.replace('/rewards'));
     }
 
     if (mode === 'redirect') {
       window.location.replace('/rewards');
-    }
-
-    // Also listen for the PASSWORD_RECOVERY event as a fallback
-    if (mode === 'reset' || !isRecovery) {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY') setMode('reset');
-      });
-      return () => subscription.unsubscribe();
     }
   }, []);
 
@@ -78,7 +82,9 @@ export default function AuthCallbackPage() {
         <div style={S.card}>
           <div style={S.logo}>Claude<span style={{ color: '#C6A05A' }}>Card</span></div>
           {done ? (
-            <p style={{ color: '#166534', fontSize: '0.9rem' }}>Password updated. Redirecting you to your Passport…</p>
+            <p style={{ color: '#166534', fontSize: '0.9rem' }}>Password updated. Redirecting to your Passport…</p>
+          ) : !ready ? (
+            <p style={{ color: '#68748E', fontSize: '0.88rem' }}>Verifying your reset link…</p>
           ) : (
             <>
               <p style={{ color: '#68748E', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Choose a new password for your account.</p>
