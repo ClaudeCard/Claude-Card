@@ -402,15 +402,22 @@ export function Footer() {
         <div>
           <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Connect</p>
           <a href="mailto:claudecard710@gmail.com" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Email Us</a>
+          <a href="/privacy" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Privacy Policy</a>
+          <a href="/terms" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Terms of Service</a>
         </div>
       </footer>
       <div style={{
         borderTop: '1px solid rgba(80,100,160,0.1)',
-        textAlign: 'center', fontSize: '0.72rem',
-        color: 'rgba(104,116,142,0.6)', letterSpacing: '0.08em',
-        padding: '1.5rem 2.5rem'
+        padding: '1.5rem 2.5rem',
+        display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
+        alignItems: 'center', gap: '0.75rem', maxWidth: '1400px', margin: '0 auto',
       }}>
-        © 2025 ClaudeCard.pro — All Rights Reserved
+        <span style={{ fontSize: '0.72rem', color: 'rgba(104,116,142,0.6)', letterSpacing: '0.08em' }}>
+          © {new Date().getFullYear()} ClaudeCard.pro — All Rights Reserved
+        </span>
+        <span style={{ fontSize: '0.72rem', color: 'rgba(104,116,142,0.5)', fontStyle: 'italic' }}>
+          One Passport. Four worlds. One connected ecosystem.
+        </span>
       </div>
     </>
   );

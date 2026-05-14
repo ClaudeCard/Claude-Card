@@ -9,6 +9,8 @@ const HomePage        = lazy(() => import('./pages/HomePage'));
 const RewardsPage     = lazy(() => import('./pages/RewardsPage'));
 const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage'));
 const AdminPage       = lazy(() => import('./pages/AdminPage'));
+const PrivacyPage     = lazy(() => import('./pages/PrivacyPage'));
+const TermsPage       = lazy(() => import('./pages/TermsPage'));
 
 function PageLoader() {
   return (
@@ -88,6 +90,8 @@ export default function App() {
                 <Route path="/"              element={<HomePage />} />
                 <Route path="/rewards"       element={<RewardsPage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/privacy"       element={<PrivacyPage />} />
+              <Route path="/terms"         element={<TermsPage />} />
               </Routes>
             </Suspense>
           </>
