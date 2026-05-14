@@ -3,6 +3,12 @@ import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
 
 const ADMIN_EMAIL = 'claudecard710@gmail.com';
 
+const KNOWN_SITES = [
+  { key: 'claudecard',      name: 'ClaudeCard'       },
+  { key: 'granny_frannies', name: "Granny Frannie's" },
+  { key: 'savvy_scuba',     name: 'Savvy Scuba'      },
+];
+
 function tierOf(pts) {
   if (pts >= 1500) return 'Founding Flame';
   if (pts >= 750)  return 'Inner Circle';
@@ -10,11 +16,51 @@ function tierOf(pts) {
   return 'Taster';
 }
 
-const KNOWN_SITES = [
-  { key: 'claudecard',     name: 'ClaudeCard'       },
-  { key: 'granny_frannies',name: "Granny Frannie's" },
-  { key: 'savvy_scuba',    name: 'Savvy Scuba'      },
-];
+// ── Member row as its own component to avoid hooks-in-map ──
+function MemberRow({ m, S, onAward }) {
+  const [apts,    setApts]    = useState('');
+  const [site,    setSite]    = useState(KNOWN_SITES[0].key);
+  const [areason, setAreason] = useState('');
+
+  const tier  = tierOf(m.profile?.global_points || 0);
+  const email = m.profile?.email || m.user_id?.slice(0, 8) + '…';
+
+  return (
+    <div style={S.row}>
+      <div style={{ flex: 1, minWidth: 220 }}>
+        <strong style={{ color: '#0C1023' }}>{email}</strong>
+        <p style={{ margin: '2px 0', fontSize: '0.78rem', color: '#68748E' }}>
+          <span style={S.badge}>{tier}</span> · {m.profile?.global_points || 0} global pts
+        </p>
+        <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {m.memberships.map(mb => (
+            <span key={mb.site_key} style={{ ...S.badge, background: 'rgba(198,160,90,0.1)', color: '#A07830' }}>
+              {mb.site_key}: {mb.site_points} pts
+            </span>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
+        <select value={site} onChange={e => setSite(e.target.value)} style={S.inp}>
+          {KNOWN_SITES.map(s => <option key={s.key} value={s.key}>{s.name}</option>)}
+        </select>
+        <input type="number" min="1" placeholder="Pts" value={apts}
+          onChange={e => setApts(e.target.value)}
+          style={{ ...S.inp, width: 70 }} />
+        <input type="text" placeholder="Reason" value={areason}
+          onChange={e => setAreason(e.target.value)}
+          style={{ ...S.inp, width: 130 }} />
+        <button style={{ ...S.btn, background: '#C6A05A' }}
+          onClick={() => {
+            onAward(m.user_id, site, KNOWN_SITES.find(s => s.key === site)?.name, parseInt(apts), areason);
+            setApts(''); setAreason('');
+          }}>
+          Award
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminPage() {
   const [user, setUser]         = useState(null);
@@ -52,7 +98,7 @@ export default function AdminPage() {
     setMLoading(true);
     const [{ data: memberships }, { data: profiles }] = await Promise.all([
       supabase.from('site_memberships').select('*').order('joined_at', { ascending: false }),
-      supabase.from('profiles').select('id, email, global_points, passport_level, global_role'),
+      supabase.from('profiles').select('id, email, global_points, passport_level'),
     ]);
     const userMap = {};
     (memberships || []).forEach(m => {
@@ -113,11 +159,7 @@ export default function AdminPage() {
   if (loading) return <div style={S.center}><p style={{ color: '#68748E' }}>Loading…</p></div>;
 
   if (!hasSupabaseConfig) return (
-    <div style={S.center}>
-      <div style={S.loginCard}>
-        <p style={{ color: '#C04040' }}>Supabase not configured.</p>
-      </div>
-    </div>
+    <div style={S.center}><div style={S.loginCard}><p style={{ color: '#C04040' }}>Supabase not configured.</p></div></div>
   );
 
   if (!user) return (
@@ -133,8 +175,7 @@ export default function AdminPage() {
             style={{ ...S.inp, width: '100%', padding: '0.85rem 1rem', boxSizing: 'border-box' }} />
           <input type="password" placeholder="Password" value={pw} onChange={e => setPw(e.target.value)} required
             style={{ ...S.inp, width: '100%', padding: '0.85rem 1rem', boxSizing: 'border-box' }} />
-          <button type="submit" disabled={signing}
-            style={{ ...S.btn, padding: '0.9rem', opacity: signing ? 0.7 : 1 }}>
+          <button type="submit" disabled={signing} style={{ ...S.btn, padding: '0.9rem', opacity: signing ? 0.7 : 1 }}>
             {signing ? '…' : 'Sign In'}
           </button>
         </form>
@@ -182,44 +223,11 @@ export default function AdminPage() {
           <div style={S.card}>
             <div style={S.hdr}><strong>All Passport Members</strong><span style={S.badge}>{members.length} users</span></div>
             <div style={S.body2}>
-              {mLoading ? <p style={{ color: '#68748E' }}>Loading…</p> : members.length === 0 ? <p style={{ color: '#68748E' }}>No members yet.</p> :
-                members.map(m => {
-                  const tier  = tierOf(m.profile?.global_points || 0);
-                  const email = m.profile?.email || m.user_id?.slice(0, 8) + '…';
-                  const [apts, setApts]     = useState('');
-                  const [site, setSite]     = useState(KNOWN_SITES[0].key);
-                  const [areason, setAreason] = useState('');
-                  return (
-                    <div key={m.user_id} style={S.row}>
-                      <div style={{ flex: 1, minWidth: 220 }}>
-                        <strong style={{ color: '#0C1023' }}>{email}</strong>
-                        <p style={{ margin: '2px 0', fontSize: '0.78rem', color: '#68748E' }}>
-                          <span style={S.badge}>{tier}</span> · {m.profile?.global_points || 0} global pts
-                        </p>
-                        <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                          {m.memberships.map(mb => (
-                            <span key={mb.site_key} style={{ ...S.badge, background: 'rgba(198,160,90,0.1)', color: '#A07830' }}>
-                              {mb.site_key}: {mb.site_points} pts
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
-                        <select value={site} onChange={e => setSite(e.target.value)} style={S.inp}>
-                          {KNOWN_SITES.map(s => <option key={s.key} value={s.key}>{s.name}</option>)}
-                        </select>
-                        <input type="number" min="1" placeholder="Pts" value={apts} onChange={e => setApts(e.target.value)}
-                          style={{ ...S.inp, width: 70 }} />
-                        <input type="text" placeholder="Reason" value={areason} onChange={e => setAreason(e.target.value)}
-                          style={{ ...S.inp, width: 130 }} />
-                        <button style={{ ...S.btn, background: '#C6A05A' }}
-                          onClick={() => { awardPoints(m.user_id, site, KNOWN_SITES.find(s=>s.key===site)?.name, parseInt(apts), areason); setApts(''); setAreason(''); }}>
-                          Award
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })
+              {mLoading
+                ? <p style={{ color: '#68748E' }}>Loading…</p>
+                : members.length === 0
+                ? <p style={{ color: '#68748E' }}>No members yet.</p>
+                : members.map(m => <MemberRow key={m.user_id} m={m} S={S} onAward={awardPoints} />)
               }
             </div>
           </div>
@@ -251,12 +259,10 @@ export default function AdminPage() {
                         <p style={{ fontStyle: 'italic', color: r.visible ? '#0C1023' : '#9CA3AF', margin: '0 0 2px', fontSize: '0.88rem' }}>"{r.review_text}"</p>
                         <p style={{ color: '#68748E', margin: 0, fontSize: '0.78rem' }}>— {r.name}</p>
                       </div>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        <button onClick={async () => { await supabase.from('gf_reviews').update({ visible: !r.visible }).eq('id', r.id); loadReviews(); }}
-                          style={{ ...S.btn, background: r.visible ? '#F0FDF4' : '#F9FAFB', color: r.visible ? '#166534' : '#6B7280', border: '1px solid', borderColor: r.visible ? '#BBF7D0' : '#E5E7EB' }}>
-                          {r.visible ? '👁 Visible' : '🙈 Hidden'}
-                        </button>
-                      </div>
+                      <button onClick={async () => { await supabase.from('gf_reviews').update({ visible: !r.visible }).eq('id', r.id); loadReviews(); }}
+                        style={{ ...S.btn, background: r.visible ? '#F0FDF4' : '#F9FAFB', color: r.visible ? '#166534' : '#6B7280', border: `1px solid ${r.visible ? '#BBF7D0' : '#E5E7EB'}` }}>
+                        {r.visible ? '👁 Visible' : '🙈 Hidden'}
+                      </button>
                     </div>
                   ))}
                 </>
