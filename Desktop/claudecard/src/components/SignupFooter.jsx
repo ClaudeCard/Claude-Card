@@ -5,7 +5,17 @@ import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
 const siteKey = import.meta.env.VITE_SITE_KEY || 'claudecard';
 const siteName = import.meta.env.VITE_SITE_NAME || 'Claude Card';
 
-const worlds = ["Claude's Creations", "Granny Frannie's", 'Savvy Scuba', 'SweetStone', 'Food Is Love Meal Prep', "Claude's BBQ Club", 'MenuPlan Pro', 'Spiritual Clubhouse', 'Food Is Love Mobile Food Pantry'];
+const worlds = [
+  { name: "Claude's Creations",          href: '/#worlds' },
+  { name: "Granny Frannie's",            href: 'https://grannyfrannies.com' },
+  { name: 'Savvy Scuba',                 href: 'https://savvyscuba.com' },
+  { name: 'SweetStone',                  href: 'https://sweetstone.com' },
+  { name: 'Food Is Love Meal Prep',      href: '/#worlds' },
+  { name: "Claude's BBQ Club",           href: '/#worlds' },
+  { name: 'MenuPlan Pro',                href: 'https://menuplan.pro' },
+  { name: 'Spiritual Clubhouse',         href: 'https://spiritualclubhouse.com' },
+  { name: 'Food Is Love Mobile Pantry',  href: '/#worlds' },
+];
 const ecosystem = ['Rewards Circle', 'About Claude', 'Events', 'Volunteer', 'Newsletter'];
 
 const TIERS = [
@@ -370,7 +380,12 @@ export function Footer() {
         <div>
           <p style={{ fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '1.25rem' }}>Worlds</p>
           {worlds.map(w => (
-            <a key={w} href="#worlds" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>{w}</a>
+            <a key={w.name} href={w.href}
+              target={w.href.startsWith('http') ? '_blank' : undefined}
+              rel={w.href.startsWith('http') ? 'noreferrer' : undefined}
+              style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>
+              {w.name}
+            </a>
           ))}
         </div>
         <div>
