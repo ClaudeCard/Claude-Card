@@ -203,6 +203,7 @@ export function Signup() {
               <div style={{ textAlign: 'right' }}>
                 <p style={{ fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '0.4rem' }}>Global Points</p>
                 <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3.5rem', fontWeight: 300, lineHeight: 1 }}>{globalPts.toLocaleString()}</p>
+                <button onClick={() => loadPassport(user)} style={{ marginTop: '0.6rem', background: 'none', border: '1px solid rgba(198,160,90,0.25)', color: 'rgba(198,160,90,0.6)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.3rem 0.8rem', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', borderRadius: 4 }}>↻ Refresh</button>
               </div>
             </div>
 
