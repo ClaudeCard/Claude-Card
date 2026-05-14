@@ -26,7 +26,7 @@ export const projects = [
     tag: 'Ocean · Dive Travel · Adventure',
     desc: 'Premium dive travel, PADI instruction, and cinematic underwater experiences for those who feel the pull of deep water.',
     theme: 'scuba',
-    href: '#circle',
+    href: 'https://savvyscuba.com',
     span: 1,
   },
   {
