@@ -4,7 +4,7 @@ import { Signup, Footer } from '../components/SignupFooter';
 export default function RewardsPage() {
   return (
     <div id="top">
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Rewards />
         <Signup />
       </main>

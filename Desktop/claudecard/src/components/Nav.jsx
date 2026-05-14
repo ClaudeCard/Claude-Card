@@ -85,6 +85,10 @@ export default function Nav() {
 
   return(
     <>
+      <a href="#main-content" style={{position:'fixed',top:'-100%',left:'1rem',zIndex:9999,padding:'0.5rem 1rem',background:'#0C1023',color:'#F5F0E8',fontSize:'0.85rem',fontWeight:700,borderRadius:6,textDecoration:'none',transition:'top 0.2s'}}
+        onFocus={e=>e.target.style.top='1rem'} onBlur={e=>e.target.style.top='-100%'}>
+        Skip to main content
+      </a>
       <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:100,padding:'1.25rem 2.5rem',display:'flex',alignItems:'center',justifyContent:'space-between',background:scrolled||drawerOpen?'rgba(12,16,35,0.97)':'transparent',backdropFilter:scrolled&&!drawerOpen?'blur(12px)':'none',borderBottom:scrolled&&!drawerOpen?'1px solid rgba(198,160,90,0.1)':'none',transition:'all 0.3s'}}>
         <Link to="/" style={{fontFamily:'Cormorant Garamond,serif',fontSize:'1.35rem',fontWeight:600,color:'#F5F0E8',textDecoration:'none'}}>Claude<span style={{color:'#C6A05A'}}>Card</span></Link>
         <div style={{display:'flex',alignItems:'center',gap:'1.5rem'}}>
