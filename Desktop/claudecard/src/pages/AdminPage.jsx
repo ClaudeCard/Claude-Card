@@ -39,28 +39,61 @@ const mkS = () => ({
 });
 
 // ── Member row ─────────────────────────────────────────────
-function MemberRow({ m, S, onAward }) {
+function MemberRow({ m, S, onAward, onVaultApprove, onVaultRevoke }) {
   const [apts,    setApts]    = useState('');
   const [site,    setSite]    = useState(KNOWN_SITES[0].key);
   const [areason, setAreason] = useState('');
-  const tier  = tierOf(m.profile?.global_points || 0);
-  const email = m.profile?.email || m.user_id?.slice(0, 8) + '…';
+  const tier        = tierOf(m.profile?.global_points || 0);
+  const email       = m.profile?.email || m.user_id?.slice(0, 8) + '…';
+  const vaultStatus = m.vault?.status || null;
+  const isApproved  = vaultStatus === 'approved_member';
+  const isPending   = vaultStatus === 'pending_approval';
+
   return (
-    <div style={S.row}>
-      <div style={{ flex: 1, minWidth: 200 }}>
-        <strong style={{ color: '#0C1023' }}>{email}</strong>
-        <p style={{ margin: '2px 0', fontSize: '0.78rem', color: '#68748E' }}>
-          <span style={S.badge}>{tier}</span> · {m.profile?.global_points || 0} global pts
-        </p>
-        <div style={{ marginTop: 5, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-          {m.memberships.map(mb => (
-            <span key={mb.site_key} style={{ ...S.badge, background: 'rgba(198,160,90,0.1)', color: '#A07830' }}>
-              {mb.site_key}: {mb.site_points} pts
-            </span>
-          ))}
+    <div style={{ ...S.row, flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <strong style={{ color: '#0C1023' }}>{email}</strong>
+          <p style={{ margin: '2px 0', fontSize: '0.78rem', color: '#68748E' }}>
+            <span style={S.badge}>{tier}</span> · {m.profile?.global_points || 0} global pts
+          </p>
+          <div style={{ marginTop: 5, display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+            {m.memberships.map(mb => (
+              <span key={mb.site_key} style={{ ...S.badge, background: 'rgba(198,160,90,0.1)', color: '#A07830' }}>
+                {mb.site_key}: {mb.site_points} pts
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Vault access badge + controls */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, flexShrink: 0 }}>
+          <span style={{
+            ...S.badge,
+            background: isApproved ? '#F0FDF4' : isPending ? '#FEF9F0' : '#F5F7FC',
+            color: isApproved ? '#166534' : isPending ? '#A07830' : '#9CA3AF',
+          }}>
+            🔐 Vault: {isApproved ? 'Approved' : isPending ? 'Pending' : vaultStatus ? vaultStatus.replace(/_/g,' ') : 'No request'}
+          </span>
+          <div style={{ display: 'flex', gap: 5 }}>
+            {!isApproved && (
+              <button onClick={() => onVaultApprove(m.user_id)}
+                style={{ ...S.btn, background: '#166534', padding: '4px 10px', fontSize: '0.72rem', minHeight: 'unset' }}>
+                Grant Vault
+              </button>
+            )}
+            {isApproved && (
+              <button onClick={() => onVaultRevoke(m.user_id)}
+                style={{ ...S.btn, background: '#C04040', padding: '4px 10px', fontSize: '0.72rem', minHeight: 'unset' }}>
+                Revoke Vault
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
+
+      {/* Points award row */}
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         <select value={site} onChange={e => setSite(e.target.value)} style={S.inp}>
           {KNOWN_SITES.map(s => <option key={s.key} value={s.key}>{s.name}</option>)}
         </select>
@@ -68,7 +101,7 @@ function MemberRow({ m, S, onAward }) {
         <input type="text" placeholder="Reason" value={areason} onChange={e => setAreason(e.target.value)} style={{ ...S.inp, width: 120 }} />
         <button style={{ ...S.btn, background: '#C6A05A' }}
           onClick={() => { onAward(m.user_id, site, KNOWN_SITES.find(s => s.key === site)?.name, parseInt(apts), areason); setApts(''); setAreason(''); }}>
-          Award
+          Award Points
         </button>
       </div>
     </div>
@@ -165,13 +198,15 @@ export default function AdminPage() {
 
   async function loadMembers() {
     setMLoading(true);
-    const [{ data: memberships }, { data: profiles }] = await Promise.all([
+    const [{ data: memberships }, { data: profiles }, { data: vaultData }] = await Promise.all([
       supabase.from('site_memberships').select('*').order('joined_at', { ascending: false }),
       supabase.from('profiles').select('id, email, global_points'),
+      supabase.from('sweetstone_access').select('user_id, status, age_verified, access_request_message'),
     ]);
     const map = {};
-    (memberships || []).forEach(m => { if (!map[m.user_id]) map[m.user_id] = { user_id: m.user_id, memberships: [], profile: null }; map[m.user_id].memberships.push(m); });
+    (memberships || []).forEach(m => { if (!map[m.user_id]) map[m.user_id] = { user_id: m.user_id, memberships: [], profile: null, vault: null }; map[m.user_id].memberships.push(m); });
     (profiles || []).forEach(p => { if (map[p.id]) map[p.id].profile = p; });
+    (vaultData || []).forEach(v => { if (map[v.user_id]) map[v.user_id].vault = v; });
     setMembers(Object.values(map));
     setMLoading(false);
   }
@@ -212,13 +247,13 @@ export default function AdminPage() {
   }
 
   async function approveVault(userId) {
-    await supabase.from('sweetstone_access').update({ status: 'approved_member', reviewed_by: user.id, reviewed_at: new Date().toISOString() }).eq('user_id', userId);
-    flash('✓ Vault access approved.'); loadVaultRequests();
+    await supabase.from('sweetstone_access').upsert({ user_id: userId, status: 'approved_member', age_verified: true, reviewed_by: user.id, reviewed_at: new Date().toISOString() }, { onConflict: 'user_id' });
+    flash('✓ Vault access approved.');
   }
 
   async function rejectVault(userId) {
-    await supabase.from('sweetstone_access').update({ status: 'rejected', reviewed_by: user.id, reviewed_at: new Date().toISOString() }).eq('user_id', userId);
-    flash('Access rejected.'); loadVaultRequests();
+    await supabase.from('sweetstone_access').upsert({ user_id: userId, status: 'rejected', reviewed_by: user.id, reviewed_at: new Date().toISOString() }, { onConflict: 'user_id' });
+    flash('Vault access revoked.');
   }
 
   function flash(m) { setMsg(m); setTimeout(() => setMsg(''), 3500); }
@@ -303,7 +338,7 @@ export default function AdminPage() {
             <div style={S.body2}>
               {mLoading ? <p style={{ color: '#68748E' }}>Loading…</p>
                 : members.length === 0 ? <p style={{ color: '#68748E' }}>No members yet.</p>
-                : members.map(m => <MemberRow key={m.user_id} m={m} S={S} onAward={awardPoints} />)}
+                : members.map(m => <MemberRow key={m.user_id} m={m} S={S} onAward={awardPoints} onVaultApprove={async (uid) => { await approveVault(uid); loadMembers(); }} onVaultRevoke={async (uid) => { await rejectVault(uid); loadMembers(); }} />)}
             </div>
           </div>
         )}
