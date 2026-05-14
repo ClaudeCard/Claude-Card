@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import HomePage from './pages/HomePage';
 import RewardsPage from './pages/RewardsPage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
+import AdminPage from './pages/AdminPage';
 import { supabase, hasSupabaseConfig, initialHash, pendingRecovery } from './lib/supabaseClient';
 import './styles/globals.css';
 
@@ -85,12 +86,19 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      {recovering && <PasswordResetModal />}
-      <Nav />
       <Routes>
-        <Route path="/"              element={<HomePage />} />
-        <Route path="/rewards"       element={<RewardsPage />} />
-        <Route path="/auth/callback" element={<AuthCallbackPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="*" element={
+          <>
+            {recovering && <PasswordResetModal />}
+            <Nav />
+            <Routes>
+              <Route path="/"              element={<HomePage />} />
+              <Route path="/rewards"       element={<RewardsPage />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            </Routes>
+          </>
+        } />
       </Routes>
     </BrowserRouter>
   );

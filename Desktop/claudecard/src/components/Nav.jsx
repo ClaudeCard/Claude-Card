@@ -42,6 +42,7 @@ function DrawerAuth({ onSignIn }) {
       <p style={{fontSize:'0.9rem',color:'#F5F0E8',marginBottom:'0.15rem',wordBreak:'break-all'}}>{profile?.full_name||user.email}</p>
       <p style={{fontSize:'0.75rem',color:'rgba(198,160,90,0.7)',marginBottom:'1rem'}}>{profile?.passport_level||'Seed'} · {(profile?.global_points||0).toLocaleString()} pts</p>
       <Link to="/rewards" style={{display:'block',textAlign:'center',padding:'0.65rem',border:'1px solid rgba(198,160,90,0.4)',color:'#C6A05A',textDecoration:'none',fontSize:'0.75rem',letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'0.5rem'}}>View My Passport →</Link>
+      {profile?.email?.toLowerCase()==='claudecard710@gmail.com'&&<Link to="/admin" style={{display:'block',textAlign:'center',padding:'0.55rem',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(255,255,255,0.4)',textDecoration:'none',fontSize:'0.72rem',letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'0.5rem'}}>⚙️ Admin</Link>}
       <button onClick={signOut} style={{width:'100%',padding:'0.55rem',background:'none',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(198,160,90,0.5)',cursor:'pointer',fontSize:'0.72rem',letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Sans,sans-serif'}}>Sign Out</button>
     </div>
   );
