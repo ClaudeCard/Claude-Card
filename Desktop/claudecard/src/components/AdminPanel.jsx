@@ -145,7 +145,7 @@ export default function AdminPanel({ supabase, adminUser }) {
     flash('Vault access revoked.'); loadMembers(); if (tab === 'vault') loadVault();
   }
 
-  const TABS = [['members', '👥 Members'], ['vault', '🔐 Vault'], ['reviews', '⭐ GF Reviews']];
+  const TABS = [['members', '👥 Members'], ['vault', '🔐 Vault'], ['reviews', '⭐ GF Reviews'], ['admins', '🛡 Admin Access']];
   const pending   = reviews.filter(r => r.status === 'pending');
   const published = reviews.filter(r => r.status === 'published');
   const pendingV  = vault.filter(v => v.status === 'pending_approval');
@@ -250,6 +250,53 @@ export default function AdminPanel({ supabase, adminUser }) {
                 </div>
               ))}
             </>}
+          </div>
+        </div>
+      )}
+
+      {/* Admin access management */}
+      {tab === 'admins' && (
+        <div style={S.card}>
+          <div style={S.cHdr}>
+            <strong style={{ fontSize: '0.88rem' }}>Admin Access per Site</strong>
+            <span style={S.badge}>{members.length} users</span>
+          </div>
+          <div style={S.cBody}>
+            <p style={{ fontSize: '0.78rem', color: '#68748E', marginBottom: 14 }}>
+              Grant or revoke admin access for each site. Site admins can manage their site's admin panel. Only you can grant admin access.
+            </p>
+            {mLoading ? <p style={{ color: '#68748E', fontSize: '0.85rem' }}>Loading…</p>
+              : members.map(m => {
+                const email = m.profile?.email || m.user_id?.slice(0, 8) + '…';
+                return (
+                  <div key={m.user_id} style={{ ...S.row, flexDirection: 'column', gap: 8 }}>
+                    <strong style={{ fontSize: '0.88rem', color: '#0C1023' }}>{email}</strong>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {KNOWN_SITES.map(site => {
+                        const mb = m.memberships.find(mb => mb.site_key === site.key);
+                        const isAdmin = mb?.site_role === 'site_admin';
+                        if (!mb) return null;
+                        return (
+                          <div key={site.key} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 10px', border: `1px solid ${isAdmin ? 'rgba(198,160,90,0.4)' : 'rgba(80,100,160,0.15)'}`, borderRadius: 6, background: isAdmin ? 'rgba(198,160,90,0.06)' : 'transparent' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isAdmin ? '#A07830' : '#68748E' }}>{site.name}</span>
+                            {isAdmin && <span style={{ ...S.badge, background: 'rgba(198,160,90,0.15)', color: '#A07830' }}>Admin</span>}
+                            <button
+                              onClick={async () => {
+                                await supabase.rpc(isAdmin ? 'revoke_site_admin' : 'grant_site_admin', { p_user_id: m.user_id, p_site_key: site.key });
+                                flash(isAdmin ? `Admin revoked for ${site.name}` : `Admin granted for ${site.name}`);
+                                loadMembers();
+                              }}
+                              style={{ ...S.btn, padding: '2px 8px', fontSize: '0.7rem', background: isAdmin ? '#C04040' : '#166534' }}>
+                              {isAdmin ? 'Revoke' : 'Grant'}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })
+            }
           </div>
         </div>
       )}
