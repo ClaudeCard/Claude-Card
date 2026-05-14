@@ -276,19 +276,22 @@ export default function AdminPanel({ supabase, adminUser }) {
                         const mb = m.memberships.find(mb => mb.site_key === site.key);
                         const isAdmin = mb?.site_role === 'site_admin';
                         if (!mb) return null;
+                        const isMasterAdmin = m.profile?.email?.toLowerCase() === 'claudecard710@gmail.com';
                         return (
                           <div key={site.key} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 10px', border: `1px solid ${isAdmin ? 'rgba(198,160,90,0.4)' : 'rgba(80,100,160,0.15)'}`, borderRadius: 6, background: isAdmin ? 'rgba(198,160,90,0.06)' : 'transparent' }}>
                             <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isAdmin ? '#A07830' : '#68748E' }}>{site.name}</span>
-                            {isAdmin && <span style={{ ...S.badge, background: 'rgba(198,160,90,0.15)', color: '#A07830' }}>Admin</span>}
-                            <button
-                              onClick={async () => {
-                                await supabase.rpc(isAdmin ? 'revoke_site_admin' : 'grant_site_admin', { p_user_id: m.user_id, p_site_key: site.key });
-                                flash(isAdmin ? `Admin revoked for ${site.name}` : `Admin granted for ${site.name}`);
-                                loadMembers();
-                              }}
-                              style={{ ...S.btn, padding: '2px 8px', fontSize: '0.7rem', background: isAdmin ? '#C04040' : '#166534' }}>
-                              {isAdmin ? 'Revoke' : 'Grant'}
-                            </button>
+                            {isAdmin && <span style={{ ...S.badge, background: 'rgba(198,160,90,0.15)', color: '#A07830' }}>{isMasterAdmin ? '👑 Master' : 'Admin'}</span>}
+                            {!isMasterAdmin && (
+                              <button
+                                onClick={async () => {
+                                  await supabase.rpc(isAdmin ? 'revoke_site_admin' : 'grant_site_admin', { p_user_id: m.user_id, p_site_key: site.key });
+                                  flash(isAdmin ? `Admin revoked for ${site.name}` : `Admin granted for ${site.name}`);
+                                  loadMembers();
+                                }}
+                                style={{ ...S.btn, padding: '2px 8px', fontSize: '0.7rem', background: isAdmin ? '#C04040' : '#166534' }}>
+                                {isAdmin ? 'Revoke' : 'Grant'}
+                              </button>
+                            )}
                           </div>
                         );
                       })}
