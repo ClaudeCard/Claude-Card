@@ -253,7 +253,7 @@ export default function AdminPage() {
                       </div>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button onClick={async () => { await supabase.from('gf_reviews').update({ visible: !r.visible }).eq('id', r.id); loadReviews(); }}
-                          style={{ ...S.btn, background: r.visible ? '#F0FDF4', color: r.visible ? '#166534' : '#6B7280', border: '1px solid', borderColor: r.visible ? '#BBF7D0' : '#E5E7EB' }}>
+                          style={{ ...S.btn, background: r.visible ? '#F0FDF4' : '#F9FAFB', color: r.visible ? '#166534' : '#6B7280', border: '1px solid', borderColor: r.visible ? '#BBF7D0' : '#E5E7EB' }}>
                           {r.visible ? '👁 Visible' : '🙈 Hidden'}
                         </button>
                       </div>
