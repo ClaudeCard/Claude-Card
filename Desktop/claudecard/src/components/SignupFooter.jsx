@@ -81,9 +81,7 @@ export function Signup() {
     if (!activeUser || !hasSupabaseConfig) return;
     setLoadingPassport(true);
     try {
-      const { error: joinErr } = await supabase.rpc('join_site_membership', { p_site_key: siteKey, p_site_name: siteName });
-      if (joinErr) console.warn('[CC] join_site_membership error:', joinErr.message);
-      else console.log('[CC] join_site_membership ok:', siteKey);
+      await supabase.rpc('join_site_membership', { p_site_key: siteKey, p_site_name: siteName });
       const [p, m, t] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', activeUser.id).single(),
         supabase.from('site_memberships').select('*').eq('user_id', activeUser.id).order('joined_at', { ascending: true }),
@@ -92,8 +90,7 @@ export function Signup() {
       setProfile(p.data ?? null);
       setMemberships(m.data ?? []);
       setTransactions(t.data ?? []);
-    } catch (e) {
-      console.error('loadPassport error:', e);
+    } catch {
     } finally {
       setLoadingPassport(false);
     }

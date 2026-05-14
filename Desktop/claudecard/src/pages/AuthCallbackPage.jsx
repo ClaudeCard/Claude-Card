@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
-const FUNCTIONS_URL = 'https://btnqffnhxvixpenspmgz.supabase.co/functions/v1';
+const FUNCTIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
 export default function AuthCallbackPage() {
   const searchParams = new URLSearchParams(window.location.search);
