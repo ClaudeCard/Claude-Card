@@ -137,6 +137,10 @@ export default function AdminPage() {
   const [gear, setGear]         = useState([]);
   const [gLoading, setGLoading] = useState(false);
 
+  // Vault approvals
+  const [vaultRequests, setVaultRequests] = useState([]);
+  const [vLoading, setVLoading]           = useState(false);
+
   // Auth form
   const [email, setEmail]       = useState('');
   const [pw, setPw]             = useState('');
@@ -156,6 +160,7 @@ export default function AdminPage() {
     if (tab === 'reviews') loadReviews();
     if (tab === 'trips')   loadTrips();
     if (tab === 'gear')    loadGear();
+    if (tab === 'vault')   loadVaultRequests();
   }, [tab, user]);
 
   async function loadMembers() {
@@ -190,6 +195,30 @@ export default function AdminPage() {
     const { data } = await supabase.from('savvy_gear').select('*').order('created_at', { ascending: false });
     setGear(data || []);
     setGLoading(false);
+  }
+
+  async function loadVaultRequests() {
+    setVLoading(true);
+    const { data } = await supabase.from('sweetstone_access').select('*, auth_user:user_id(email)').order('created_at', { ascending: false });
+    // Also fetch emails from profiles table
+    const { data: profiles } = await supabase.from('profiles').select('id, email, global_points');
+    const enriched = (data || []).map(r => ({
+      ...r,
+      email: profiles?.find(p => p.id === r.user_id)?.email || r.user_id?.slice(0, 8) + '…',
+      global_points: profiles?.find(p => p.id === r.user_id)?.global_points || 0,
+    }));
+    setVaultRequests(enriched);
+    setVLoading(false);
+  }
+
+  async function approveVault(userId) {
+    await supabase.from('sweetstone_access').update({ status: 'approved_member', reviewed_by: user.id, reviewed_at: new Date().toISOString() }).eq('user_id', userId);
+    flash('✓ Vault access approved.'); loadVaultRequests();
+  }
+
+  async function rejectVault(userId) {
+    await supabase.from('sweetstone_access').update({ status: 'rejected', reviewed_by: user.id, reviewed_at: new Date().toISOString() }).eq('user_id', userId);
+    flash('Access rejected.'); loadVaultRequests();
   }
 
   function flash(m) { setMsg(m); setTimeout(() => setMsg(''), 3500); }
@@ -244,7 +273,7 @@ export default function AdminPage() {
     </div></div>
   );
 
-  const TABS = [['members','👥 Members'],['reviews','⭐ GF Reviews'],['trips','🗺 SS Trips'],['gear','🤿 SS Gear']];
+  const TABS = [['members','👥 Members'],['reviews','⭐ GF Reviews'],['trips','🗺 SS Trips'],['gear','🤿 SS Gear'],['vault','🔐 Vault Access']];
   const pending   = reviews.filter(r => r.status === 'pending');
   const published = reviews.filter(r => r.status === 'published');
   const pendingGear = gear.filter(g => !g.approved);
@@ -363,6 +392,55 @@ export default function AdminPage() {
             <div style={S.body2}>
               {gLoading ? <p style={{ color: '#68748E' }}>Loading…</p> : gear.length === 0 ? <p style={{ color: '#68748E' }}>No listings.</p>
                 : gear.map(g => <GearRow key={g.id} item={g} S={S} onApprove={approveGear} onDelete={deleteGear} />)}
+            </div>
+          </div>
+        )}
+
+        {/* ── Vault Approvals ── */}
+        {tab === 'vault' && (
+          <div style={S.card}>
+            <div style={S.hdr}>
+              <strong>SweetStone Vault Access Requests</strong>
+              <span style={S.badge}>{vaultRequests.length} total · {vaultRequests.filter(r => r.status === 'pending_approval').length} pending</span>
+            </div>
+            <div style={S.body2}>
+              {vLoading ? <p style={{ color: '#68748E' }}>Loading…</p>
+                : vaultRequests.length === 0
+                ? <p style={{ color: '#68748E' }}>No access requests yet.</p>
+                : vaultRequests.map(r => (
+                  <div key={r.user_id} style={{ ...S.row, flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
+                      <div>
+                        <strong style={{ color: '#0C1023' }}>{r.email}</strong>
+                        <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: '#68748E' }}>
+                          {r.global_points} global pts · Age verified: {r.age_verified ? '✓' : '✗'} · Requested {new Date(r.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <span style={{
+                        ...S.badge,
+                        background: r.status === 'approved_member' ? '#F0FDF4' : r.status === 'rejected' ? '#FEF2F2' : 'rgba(198,160,90,0.1)',
+                        color: r.status === 'approved_member' ? '#166534' : r.status === 'rejected' ? '#C04040' : '#A07830',
+                      }}>
+                        {r.status.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    {r.access_request_message && (
+                      <p style={{ fontSize: '0.83rem', color: '#68748E', fontStyle: 'italic', background: '#F5F7FC', padding: '10px 14px', borderRadius: 6, margin: 0 }}>
+                        "{r.access_request_message}"
+                      </p>
+                    )}
+                    {r.status === 'pending_approval' && (
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => approveVault(r.user_id)} style={{ ...S.btn, background: '#166534' }}>✓ Approve Vault Access</button>
+                        <button onClick={() => rejectVault(r.user_id)} style={{ ...S.btn, background: '#C04040' }}>✗ Reject</button>
+                      </div>
+                    )}
+                    {r.status === 'approved_member' && (
+                      <button onClick={() => rejectVault(r.user_id)} style={{ ...S.btn, background: '#6B7280', width: 'fit-content' }}>Revoke Access</button>
+                    )}
+                  </div>
+                ))
+              }
             </div>
           </div>
         )}
