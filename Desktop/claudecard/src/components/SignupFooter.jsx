@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useInView } from '../hooks/useInView';
 import { supabase, hasSupabaseConfig } from '../lib/supabaseClient';
+import AdminPanel from './AdminPanel';
 
-const siteKey = import.meta.env.VITE_SITE_KEY || 'claudecard';
+const siteKey  = import.meta.env.VITE_SITE_KEY  || 'claudecard';
 const siteName = import.meta.env.VITE_SITE_NAME || 'Claude Card';
+const ADMIN_EMAIL = 'claudecard710@gmail.com';
 
 const worlds = [
   { name: "Claude's Creations",          href: '/#worlds' },
@@ -303,6 +305,11 @@ export function Signup() {
                 color: '#68748E', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif'
               }}>Sign out</button>
             </div>
+
+            {/* Admin panel — only visible to admin email */}
+            {user?.email?.toLowerCase() === ADMIN_EMAIL && (
+              <AdminPanel supabase={supabase} adminUser={user} />
+            )}
 
           </>)}
         </>
