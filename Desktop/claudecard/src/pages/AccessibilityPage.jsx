@@ -1,7 +1,13 @@
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export default function AccessibilityPage() {
   return (
+    <>
+      <Helmet>
+        <title>Accessibility — ClaudeCard</title>
+        <meta name="description" content="ClaudeCard's accessibility commitment and how to reach us with accessibility concerns." />
+      </Helmet>
     <div style={{ fontFamily: 'DM Sans, system-ui, sans-serif', background: '#F5F7FC', minHeight: '100vh' }}>
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '8rem 2rem 4rem' }}>
         <p style={{ fontSize: '0.72rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '0.75rem' }}>Legal</p>
@@ -47,5 +53,6 @@ export default function AccessibilityPage() {
         </div>
       </div>
     </div>
+  </>
   );
 }
