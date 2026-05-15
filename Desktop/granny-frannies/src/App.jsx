@@ -2599,9 +2599,24 @@ export default function App() {
             </div>
           </div>
 
-          {/* TODO-CANDYMAN (Part 1.3): Add cross-ecosystem footer section here once canonical
-               rewards program name is confirmed. Should link to claudecard.pro and the other
-               three sites with identical language across all four footers. */}
+          {/* Ecosystem cross-links — hub URL is fixed; name updated once Part 1.3 naming is confirmed */}
+          <div style={{borderTop:"1px solid rgba(255,255,255,0.08)",paddingTop:"1.5rem",marginBottom:"1.5rem",textAlign:"center"}}>
+            <p style={{fontFamily:"'Lora',serif",fontSize:"0.68rem",letterSpacing:"0.18em",textTransform:"uppercase",color:"rgba(255,255,255,0.2)",marginBottom:"0.75rem"}}>
+              Part of the Connected Ecosystem
+            </p>
+            <div style={{display:"flex",gap:"1.2rem",justifyContent:"center",flexWrap:"wrap"}}>
+              {[
+                ["ClaudeCard","https://claudecard.pro"],
+                ["Savvy Scuba","https://savvyscuba.com"],
+                ["SweetStone","https://sweetstone.com"],
+              ].map(([label,href])=>(
+                <a key={href} href={href} target="_blank" rel="noopener noreferrer"
+                  style={{fontFamily:"'Lora',serif",fontSize:"0.72rem",color:"rgba(255,255,255,0.25)",textDecoration:"none",letterSpacing:"0.08em"}}>
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
 
           {/* Bottom: tagline + stripe + cottage food disclaimer + copyright */}
           <div style={{borderTop:"1px solid rgba(255,255,255,0.08)",paddingTop:"1.5rem",textAlign:"center"}}>
