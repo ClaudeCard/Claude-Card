@@ -404,6 +404,7 @@ export function Footer() {
           <a href="mailto:claudecard710@gmail.com" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Email Us</a>
           <a href="/privacy" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Privacy Policy</a>
           <a href="/terms" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Terms of Service</a>
+          <a href="/accessibility" style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>Accessibility</a>
         </div>
       </footer>
       <div style={{
