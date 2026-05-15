@@ -387,7 +387,7 @@ export function Footer() {
           {worlds.map(w => (
             <a key={w.name} href={w.href}
               target={w.href.startsWith('http') ? '_blank' : undefined}
-              rel={w.href.startsWith('http') ? 'noreferrer' : undefined}
+              rel={w.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               style={{ display: 'block', fontSize: '0.82rem', color: '#68748E', textDecoration: 'none', marginBottom: '0.6rem' }}>
               {w.name}
             </a>
