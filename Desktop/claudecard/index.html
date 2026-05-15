@@ -70,7 +70,22 @@
     <title>ClaudeCard | Claude's Food, Wellness, Service & Adventure Worlds</title>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Interim SSR: critical above-the-fold content for crawlers and social previewers.
+         React replaces this on load. Remove once full SSG prerender is active. -->
+    <div id="root">
+      <section aria-label="Hero" style="min-height:min(880px,100vh);display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 2.5rem 6rem;background:#F5F7FC;position:relative">
+        <p style="font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:#C6A05A;margin:0 0 1.5rem">ClaudeCard.pro — The Hub</p>
+        <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(3.5rem,8vw,7.5rem);font-weight:300;line-height:1.05;color:#0C1023;letter-spacing:-0.01em;max-width:820px;margin:0 0 2rem">
+          Chef. Creator.<br>Builder. <em style="font-style:italic;color:#C6A05A">Servant<br>of Love.</em>
+        </h1>
+        <p style="font-size:1.05rem;color:#68748E;max-width:520px;margin:0 0 3rem;line-height:1.8;font-weight:300">
+          A world of food, hospitality, adventure, wellness, service, storytelling, and ridiculous creativity.
+        </p>
+        <div>
+          <a href="#worlds" style="display:inline-block;padding:0.9rem 2.25rem;background:#0C1023;color:#F5F0E8;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;font-family:inherit">Explore the Worlds</a>
+        </div>
+      </section>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
