@@ -6,16 +6,16 @@ const STRIPE_PK = import.meta.env.VITE_STRIPE_PK;
 const LOGO = "/logo.png";
 
 const INITIAL_PRODUCTS = [
-  {id:1,sku:"GFC-001",name:"Granny Frannie's Classic",emoji:"🍪",price:14,unit:"half dozen",badge:"The OG",badgeColor:"#0D1F5C",desc:"The original oatmeal chocolate chip — thick, chewy, packed with rolled oats and dark chocolate chips. Made exactly the way she made them.",bg:"linear-gradient(135deg,#D6E0FF,#4F74E3)",soldOut:false,image:null,category:"cookie",ingredients:"Rolled oats, all-purpose flour, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt, cinnamon",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
-  {id:2,sku:"GFC-002",name:"Double Chocolate Oat",emoji:"🍫",price:14,unit:"half dozen",badge:"Fan Fave",badgeColor:"#1A3BAA",desc:"A chocolate cookie base folded with oats and double the chocolate chips. For those who can never have too much.",bg:"linear-gradient(135deg,#C0CCFF,#2E54CC)",soldOut:false,image:null,category:"cookie",ingredients:"Rolled oats, all-purpose flour, unsweetened cocoa powder, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
-  {id:3,sku:"GFC-003",name:"PB Oat Chip",emoji:"🥜",price:14,unit:"half dozen",badge:null,desc:"Creamy peanut butter meets oats and chocolate chips. A cookie that earns its own fan club every single time.",bg:"linear-gradient(135deg,#E8F0FF,#B8CAFF)",soldOut:false,image:null,category:"cookie",ingredients:"Rolled oats, all-purpose flour, creamy peanut butter, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs, peanuts. May contain: soy, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
-  {id:4,sku:"GFC-004",name:"Brown Butter Maple Oat",emoji:"🍁",price:15,unit:"half dozen",badge:"New",badgeColor:"#E8B84B",desc:"Browned butter and real maple syrup give this oat cookie a depth that'll make you rethink what a cookie can be.",bg:"linear-gradient(135deg,#EEF2FF,#D6E0FF)",soldOut:false,image:null,category:"cookie",ingredients:"Rolled oats, all-purpose flour, browned unsalted butter, pure maple syrup, brown sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
-  {id:6,sku:"GFC-006",name:"Granny Frannie's Gluten-Free Oatmeal Chocolate Chip",emoji:"🌾",price:16,unit:"half dozen",badge:"Gluten-Free",badgeColor:"#16a34a",desc:"Same love. Same legacy. Made with gluten-free ingredients for friends who need a gentler cookie option. Not produced in a certified gluten-free kitchen.",bg:"linear-gradient(135deg,#D1FAE5,#6EE7B7)",soldOut:false,image:null,category:"cookie",ingredients:"Certified GF rolled oats, GF flour blend (rice flour, tapioca starch, xanthan gum), unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Made with GF ingredients — NOT in a certified GF kitchen. Contains: milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
-  {id:5,sku:"GFC-005",name:"Gift Box — Assorted",emoji:"🎁",price:26,unit:"dozen",badge:null,desc:"A dozen mixed cookies, beautifully packaged. Perfect for gifting, sharing, or keeping all to yourself. No judgment.",bg:"linear-gradient(135deg,#D6E0FF,#4F74E3)",soldOut:false,image:null,category:"gift",ingredients:"Assorted — see individual cookie labels.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 20 oz (12 cookies)"},
-  {id:10,sku:"GFC-010",name:"Vanilla Bean Ice Cream Sandwich",emoji:"🍦",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Two fresh-baked cookies hugging creamy vanilla bean ice cream. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#EEF2FF,#D6E0FF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
-  {id:11,sku:"GFC-011",name:"Salted Caramel Ice Cream Sandwich",emoji:"🍨",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Rich salted caramel ice cream between signature cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#D6E0FF,#C0CCFF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
-  {id:12,sku:"GFC-012",name:"Mint Chip Ice Cream Sandwich",emoji:"🌿",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Cool mint chip ice cream between warm oatmeal chocolate chip cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#E8F0FF,#B8CAFF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
-  {id:13,sku:"GFC-013",name:"Strawberry Ice Cream Sandwich",emoji:"🍓",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Real strawberry ice cream between Granny Frannie's cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#FFE4E4,#FFBBBB)",soldOut:true,comingSoon:true,image:null,category:"sandwich",ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
+  {id:1,sku:"GFC-001",name:"Granny Frannie's Classic",emoji:"🍪",price:14,unit:"half dozen",badge:"The OG",badgeColor:"#0D1F5C",desc:"The original oatmeal chocolate chip — thick, chewy, packed with rolled oats and dark chocolate chips. Made exactly the way she made them.",bg:"linear-gradient(135deg,#D6E0FF,#4F74E3)",soldOut:false,image:null,category:"cookie",recipeId:1,ingredients:"Rolled oats, all-purpose flour, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt, cinnamon",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
+  {id:2,sku:"GFC-002",name:"Double Chocolate Oat",emoji:"🍫",price:14,unit:"half dozen",badge:"Fan Fave",badgeColor:"#1A3BAA",desc:"A chocolate cookie base folded with oats and double the chocolate chips. For those who can never have too much.",bg:"linear-gradient(135deg,#C0CCFF,#2E54CC)",soldOut:false,image:null,category:"cookie",recipeId:2,ingredients:"Rolled oats, all-purpose flour, unsweetened cocoa powder, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
+  {id:3,sku:"GFC-003",name:"PB Oat Chip",emoji:"🥜",price:14,unit:"half dozen",badge:null,desc:"Creamy peanut butter meets oats and chocolate chips. A cookie that earns its own fan club every single time.",bg:"linear-gradient(135deg,#E8F0FF,#B8CAFF)",soldOut:false,image:null,category:"cookie",recipeId:3,ingredients:"Rolled oats, all-purpose flour, creamy peanut butter, unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs, peanuts. May contain: soy, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
+  {id:4,sku:"GFC-004",name:"Brown Butter Maple Oat",emoji:"🍁",price:15,unit:"half dozen",badge:"New",badgeColor:"#E8B84B",desc:"Browned butter and real maple syrup give this oat cookie a depth that'll make you rethink what a cookie can be.",bg:"linear-gradient(135deg,#EEF2FF,#D6E0FF)",soldOut:false,image:null,category:"cookie",recipeId:4,ingredients:"Rolled oats, all-purpose flour, browned unsalted butter, pure maple syrup, brown sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
+  {id:6,sku:"GFC-006",name:"Granny Frannie's Gluten-Free Oatmeal Chocolate Chip",emoji:"🌾",price:16,unit:"half dozen",badge:"Gluten-Free",badgeColor:"#16a34a",desc:"Same love. Same legacy. Made with gluten-free ingredients for friends who need a gentler cookie option. Not produced in a certified gluten-free kitchen.",bg:"linear-gradient(135deg,#D1FAE5,#6EE7B7)",soldOut:false,image:null,category:"cookie",recipeId:9,ingredients:"Certified GF rolled oats, GF flour blend (rice flour, tapioca starch, xanthan gum), unsalted butter, brown sugar, granulated sugar, eggs, pure vanilla extract, dark chocolate chips, baking soda, salt",allergens:"Made with GF ingredients — NOT in a certified GF kitchen. Contains: milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 10 oz (6 cookies)"},
+  {id:5,sku:"GFC-005",name:"Gift Box — Assorted",emoji:"🎁",price:26,unit:"dozen",badge:null,desc:"A dozen mixed cookies, beautifully packaged. Perfect for gifting, sharing, or keeping all to yourself. No judgment.",bg:"linear-gradient(135deg,#D6E0FF,#4F74E3)",soldOut:false,image:null,category:"gift",recipeId:null,ingredients:"Assorted — see individual cookie labels.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"approx. 20 oz (12 cookies)"},
+  {id:10,sku:"GFC-010",name:"Vanilla Bean Ice Cream Sandwich",emoji:"🍦",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Two fresh-baked cookies hugging creamy vanilla bean ice cream. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#EEF2FF,#D6E0FF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",recipeId:null,ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
+  {id:11,sku:"GFC-011",name:"Salted Caramel Ice Cream Sandwich",emoji:"🍨",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Rich salted caramel ice cream between signature cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#D6E0FF,#C0CCFF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",recipeId:null,ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
+  {id:12,sku:"GFC-012",name:"Mint Chip Ice Cream Sandwich",emoji:"🌿",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Cool mint chip ice cream between warm oatmeal chocolate chip cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#E8F0FF,#B8CAFF)",soldOut:true,comingSoon:true,image:null,category:"sandwich",recipeId:null,ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
+  {id:13,sku:"GFC-013",name:"Strawberry Ice Cream Sandwich",emoji:"🍓",price:7,unit:"each",badge:"Coming Soon",badgeColor:"#2E54CC",desc:"Real strawberry ice cream between Granny Frannie's cookies. Coming soon — pending licensed commercial production.",bg:"linear-gradient(135deg,#FFE4E4,#FFBBBB)",soldOut:true,comingSoon:true,image:null,category:"sandwich",recipeId:null,ingredients:"TBD — pending licensed production.",allergens:"Contains: wheat, milk, eggs. May contain: soy, peanuts, tree nuts.",netWeight:"TBD"},
 ];
 
 const NOTIFY_KEY   = "gf_notify_list";
@@ -237,7 +237,8 @@ function ReviewForm({ currentUser, onPointsAwarded }) {
 
 // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
 function AdminPanel({ products, setProducts, notifyList, clubList, testimonials, setTestimonials, onClose }) {
-  const [tab, setTab]         = useState("products");
+  const [tab, setTab]           = useState("products");
+  const [recipeTarget, setRecipeTarget] = useState(null); // recipeId to pre-expand when jumping to Recipes tab
   const [editId, setEditId]   = useState(null);
   const [isNew, setIsNew]     = useState(false);
   const [form, setForm]       = useState({});
@@ -467,6 +468,13 @@ function AdminPanel({ products, setProducts, notifyList, clubList, testimonials,
                 </div>
                 <div style={{display:"flex",gap:"0.4rem",flexWrap:"wrap"}}>
                   <button style={P.editBt} onClick={()=>startEdit(p)}>✏️ Edit</button>
+                  {p.recipeId != null
+                    ? <button style={{...P.editBt,background:"rgba(22,163,74,0.18)",borderColor:"rgba(22,163,74,0.4)",color:"#4ade80"}}
+                        onClick={()=>{ setRecipeTarget(p.recipeId); setTab("recipes"); }}>
+                        📋 Recipe
+                      </button>
+                    : <span style={{fontFamily:"'Lora',serif",fontSize:"0.7rem",color:"rgba(255,255,255,0.2)",alignSelf:"center",paddingInline:"0.3rem"}}>no recipe</span>
+                  }
                   <button style={P.soBt(p.soldOut&&!p.comingSoon)} onClick={()=>{if(p.comingSoon)toggleComingSoon(p.id);else toggleSoldOut(p.id);}}>{p.soldOut&&!p.comingSoon?"✅ In Stock":"🚫 Sold Out"}</button>
                   <button style={P.csBt(p.comingSoon)} onClick={()=>toggleComingSoon(p.id)}>{p.comingSoon?"✅ Live":"🔜 Coming Soon"}</button>
                   <button style={P.delBt} onClick={()=>setConfirmDel(p.id)}>🗑️</button>
@@ -689,7 +697,7 @@ function AdminPanel({ products, setProducts, notifyList, clubList, testimonials,
             }
           </>}
 
-          {tab==="recipes" && <RecipesTab/>}
+          {tab==="recipes" && <RecipesTab defaultOpen={recipeTarget}/>}
         </div>
       </div>
     </div>
@@ -1283,8 +1291,8 @@ function AccountPanel({ user, onClose, onLogout, onUpdateUser }) {
 }
 
 // ─── RECIPES TAB COMPONENT ───────────────────────────────────────────────────
-function RecipesTab() {
-  const [open, setOpen]     = useState(null);
+function RecipesTab({ defaultOpen = null }) {
+  const [open, setOpen]       = useState(defaultOpen);
   const [section, setSection] = useState("ingredients"); // ingredients | steps
 
   const P2 = {
@@ -1582,6 +1590,37 @@ const RECIPES = [
       "Scoop onto baking sheets. Press a pinch of flaky sea salt on each ball before baking.",
       "Bake 10–12 min. Watch carefully — caramel can over-brown quickly.",
       "Cool on pan 5 min before moving — caramel needs time to set.",
+    ],
+  },
+  {
+    id:9, name:"GF Oatmeal Chocolate Chip", emoji:"🌾", color:"#16a34a",
+    yield:"6–8 dozen",
+    note:"GF flour absorbs differently — don't over-mix after adding the flour blend. Dough will be slightly stickier than the Classic. Chill is non-negotiable here.",
+    ingredients:[
+      {qty:"1 lb",        item:"Unsalted butter (room temperature)"},
+      {qty:"4 cups",      item:"Certified GF rolled oats"},
+      {qty:"3 cups",      item:"GF flour blend (rice flour, tapioca starch, xanthan gum)"},
+      {qty:"2 cups",      item:"Brown sugar, packed"},
+      {qty:"1 cup",       item:"White granulated sugar"},
+      {qty:"4",           item:"Eggs"},
+      {qty:"2 tsp",       item:"Baking soda"},
+      {qty:"1 tsp",       item:"Baking powder"},
+      {qty:"2 tsp",       item:"Pure vanilla extract"},
+      {qty:"1 tsp",       item:"Salt"},
+      {qty:"1 tsp",       item:"Cinnamon"},
+      {qty:"2 bags (24oz)",item:"GF chocolate chips (verify brand)"},
+    ],
+    steps:[
+      "Preheat oven to 350°F. Line baking sheets with parchment.",
+      "Cream butter and both sugars until light and fluffy — 3-4 min.",
+      "Add eggs one at a time, then vanilla.",
+      "In a separate bowl, whisk GF flour blend, baking soda, baking powder, salt, and cinnamon.",
+      "Add dry to wet gradually — mix until JUST combined. Do not over-mix; GF blends get dense fast.",
+      "Fold in GF oats, then chocolate chips.",
+      "Chill dough at least 45 min (longer than Classic — GF blends need the rest).",
+      "Scoop onto lined baking sheets, 2 inches apart. Slightly flatten each ball.",
+      "Bake 11–13 min. Centers should look barely set — they firm as they cool.",
+      "Cool on pan 8 min before transferring. GF cookies are more fragile warm.",
     ],
   },
 ];
