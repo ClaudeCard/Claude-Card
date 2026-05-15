@@ -2560,6 +2560,10 @@ export default function App() {
             </div>
           </div>
 
+          {/* TODO-CANDYMAN (Part 1.3): Add cross-ecosystem footer section here once canonical
+               rewards program name is confirmed. Should link to claudecard.pro and the other
+               three sites with identical language across all four footers. */}
+
           {/* Bottom: tagline + stripe + cottage food disclaimer + copyright */}
           <div style={{borderTop:"1px solid rgba(255,255,255,0.08)",paddingTop:"1.5rem",textAlign:"center"}}>
             <p style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,0.45)",marginBottom:"1rem",letterSpacing:"0.5px"}}>
