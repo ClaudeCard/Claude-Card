@@ -97,15 +97,25 @@ Which ESP (email service provider) should the DivePulse "coming soon" capture wi
 
 ## Real OG Images Needed (Part 1.4 / 4.1 / 5.5)
 
-| Site | Current OG image | Status |
-|---|---|---|
-| claudecard.pro | `/claude.jpg` (unknown — need to verify it's brand-quality) | Check |
-| grannyfrannies.com | `/og.png` (appears to be generated) | Check |
-| savvyscuba.com | Unsplash diver photo (stock) | **Replace — high priority** |
-| sweetstone.com | `/og.png` (unknown) | Check |
+| Site | Current OG image | File exists? | Size | Status |
+|---|---|---|---|---|
+| claudecard.pro | `claude.jpg` | Yes | 450KB | Verify dimensions are 1200×630 |
+| grannyfrannies.com | `og.png` (generated) | Yes | 42KB | Looks okay — verify dimensions |
+| savvyscuba.com | Unsplash URL (external stock) | No local file | — | **REPLACE — high priority** |
+| sweetstone.com | `/og.png` | **FILE MISSING** | — | **CRITICAL — will 404 in social previews** |
 
-For savvyscuba.com specifically: send me a real dive photo (yours or Melisa's).
+**For savvyscuba.com:** Send a real dive photo (yours or Melisa's).
 Specs: 1200×630px, under 1MB, JPG or PNG.
+
+**For sweetstone.com:** Send a brand mark or lifestyle image.
+Same specs. Until received, social previews will show a broken image.
+
+**Savvy Scuba stock image inventory** (all from Unsplash — all need replacing):
+- Hero background: `photo-1544551763-77ef2d0cfc6c` (also used as OG)
+- Trip cards: `photo-1682687220742-aba13b6e50ba`, `photo-1544551763-46a013bb70d5`, `photo-1582967788606-a171c1080cb0`
+- Gear fallback: `photo-1544551763-46a013bb70d5`
+- Destinations (11 images): all from Unsplash
+These will be replaced once you provide real trip/gear photography.
 
 ---
 
