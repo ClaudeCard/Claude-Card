@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Granny Frannie's Cookies — Handmade in Michigan</title>
+    <meta name="description" content="Granny Frannie's Cookies — thick, chewy oatmeal chocolate chip cookies baked in Michigan. Order for pickup, local delivery, or Michigan-only shipping." />
+    <meta name="keywords" content="cookies, bakery, Michigan, cottage food, oatmeal chocolate chip, gluten free, gift box, handmade" />
+    <meta name="theme-color" content="#0D1F5C" />
+    <link rel="canonical" href="https://grannyfrannies.com" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://js.stripe.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YCDCJMPDJM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YCDCJMPDJM');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:site_name"   content="Granny Frannie's Cookies" />
+    <meta property="og:url"         content="https://grannyfrannies.com" />
+    <meta property="og:title"       content="Granny Frannie's Cookies — Handmade in Michigan" />
+    <meta property="og:description" content="Thick, chewy oatmeal chocolate chip cookies baked with love in Michigan. Order for pickup, local delivery, or Michigan-only shipping." />
+    <meta property="og:image"       content="https://grannyfrannies.com/og.png" />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt"   content="Granny Frannie's Cookies — Handmade in Michigan" />
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="Granny Frannie's Cookies — Handmade in Michigan" />
+    <meta name="twitter:description" content="Thick, chewy oatmeal chocolate chip cookies baked with love in Michigan." />
+    <meta name="twitter:image"       content="https://grannyfrannies.com/og.png" />
+
+    <!-- Critical nav CSS: loaded synchronously so mobile/desktop visibility is correct
+         before the JS-injected GLOBAL_CSS runs. Prevents double-nav flash on initial load. -->
+    <style>
+      .mob-menu { display: none !important; }
+      .mob-menu.open { display: flex !important; }
+      @media (max-width: 768px) {
+        .desk-links { display: none !important; }
+        .hamburger  { display: flex !important; }
+      }
+    </style>
+
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Bakery",
+      "name": "Granny Frannie's Cookies",
+      "description": "Handmade oatmeal chocolate chip cookies baked in Michigan. Michigan cottage food bakery offering pickup, local delivery, and Michigan-only shipping.",
+      "url": "https://grannyfrannies.com",
+      "email": "claudecard710@gmail.com",
+      "image": "https://grannyfrannies.com/og.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "MI",
+        "addressCountry": "US"
+      },
+      "servesCuisine": ["Cookies", "Bakery"],
+      "priceRange": "$",
+      "hasMenu": "https://grannyfrannies.com/#menu",
+      "sameAs": []
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
