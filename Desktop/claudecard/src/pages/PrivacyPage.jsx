@@ -1,7 +1,13 @@
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export default function PrivacyPage() {
   return (
+    <>
+      <Helmet>
+        <title>Privacy Policy — ClaudeCard</title>
+        <meta name="description" content="How ClaudeCard collects, uses, and protects your information." />
+      </Helmet>
     <div style={{ fontFamily: 'DM Sans, system-ui, sans-serif', background: '#F5F7FC', minHeight: '100vh' }}>
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '8rem 2rem 4rem' }}>
         <p style={{ fontSize: '0.72rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6A05A', marginBottom: '0.75rem' }}>Legal</p>
@@ -75,5 +81,6 @@ export default function PrivacyPage() {
         </div>
       </div>
     </div>
+  </>
   );
 }

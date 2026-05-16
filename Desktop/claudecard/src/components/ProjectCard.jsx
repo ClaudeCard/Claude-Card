@@ -22,7 +22,7 @@ export default function ProjectCard({ project, index }) {
       className={gridSpan === 3 ? 'world-card world-card-full' : 'world-card'}
       href={project.href}
       target={isExternal ? '_blank' : undefined}
-      rel={isExternal ? 'noreferrer' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
       aria-label={isExternal ? `Visit ${project.name}` : `Join the circle for ${project.name}`}
       style={{
         position: 'relative',
